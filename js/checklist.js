@@ -45,26 +45,6 @@ function generatePDF() {
     // 1. Create a deep clone of the element
     const clone = originalElement.cloneNode(true);
 
-    // FIX: Manually copy values from original to clone for inputs/textareas
-    // html2canvas reads attributes, not current JS properties for some elements.
-    const originalInputs = originalElement.querySelectorAll('input, textarea, select');
-    const cloneInputs = clone.querySelectorAll('input, textarea, select');
-
-    originalInputs.forEach((input, index) => {
-        const cloneInput = cloneInputs[index];
-        if (!cloneInput) return;
-
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) {
-                cloneInput.setAttribute('checked', 'checked');
-                cloneInput.checked = true;
-            }
-        } else {
-            cloneInput.setAttribute('value', input.value);
-            cloneInput.value = input.value;
-        }
-    });
-
     // 2. Wrap clone in a fixed-width container to enforce A4 Landscape proportions
     // Crucial: Use min-width to prevent browser compression on small screens
     const container = document.createElement('div');
