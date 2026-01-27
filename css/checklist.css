@@ -282,14 +282,15 @@ button {
 
 /* --- PDF Mode (A4 Flex Layout) --- */
 #checklist-content.pdf-mode {
-    width: 1123px !important;
-    /* Fill the fixed 1123px container */
+    width: 794px !important;
+    max-width: none !important;
+    /* Fill the fixed 794px container */
     height: auto !important;
     padding: 5px !important;
     margin: 0 !important;
     font-size: 12px !important;
-    color: black !important;
-    background: white !important;
+    color: #000000 !important;
+    background: #ffffff !important;
     box-sizing: border-box;
     display: block !important;
     overflow: visible !important;

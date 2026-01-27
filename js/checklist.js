@@ -51,8 +51,8 @@ function generatePDF() {
     container.style.position = 'absolute';
     container.style.top = '0';
     container.style.left = '0';
-    container.style.width = '1123px';
-    container.style.minWidth = '1123px'; // Force non-collapsed width
+    container.style.width = '794px';
+    container.style.minWidth = '794px'; // Force non-collapsed width
     container.style.zIndex = '-9999';
     container.style.backgroundColor = '#ffffff';
     container.appendChild(clone);
@@ -107,10 +107,9 @@ function generatePDF() {
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
             scale: 2,
-            useCORS: true,
-            logging: true,
-            width: 1123, // Force capture width
-            windowWidth: 1123, // Simulate desktop window
+            scale: 2,
+            width: 794, // Force capture width
+            windowWidth: 794, // Simulate desktop window
             scrollX: 0,
             scrollY: 0
         },
