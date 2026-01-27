@@ -1,0 +1,162 @@
+:root {
+    --bg-color: #1a1a1a;
+    --panel-bg: rgba(30, 30, 30, 0.95);
+    --text-color: #ffffff;
+    --accent: #007bff;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#canvas-container {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.panel {
+    background: var(--panel-bg);
+    padding: 20px;
+    border-radius: 8px;
+    pointer-events: auto;
+    width: 300px;
+    border: 1px solid #444;
+}
+
+.mode-switch {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 8px;
+    background: #444;
+    border: 1px solid #555;
+    color: #888;
+    font-size: 0.9em;
+}
+
+.mode-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85em;
+    margin-bottom: 4px;
+    color: #bbb;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 6px;
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: white;
+    box-sizing: border-box;
+    /* fix width overflow */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.primary-btn {
+    background-color: var(--accent);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #0069d9;
+}
+
+.secondary-btn {
+    background-color: #555;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #666;
+}
+
+.danger-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.danger-btn:hover {
+    background-color: #bd2130;
+}
+
+.separator {
+    height: 1px;
+    background: #555;
+    margin: 15px 0;
+}
+
+#status-display {
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-safe {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.status-danger {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.status-warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}

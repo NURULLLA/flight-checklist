@@ -1,0 +1,534 @@
+﻿
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta charset="utf-8">
+            <title>Checklist Export</title>
+            
+        <style>
+            body { font-family: Arial, sans-serif; font-size: 11pt; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid black; padding: 5px; text-align: left; }
+            th { background-color: #f0f0f0; }
+            h1 { text-align: center; }
+            .header-info { margin-bottom: 20px; }
+            .header-info div { margin-bottom: 5px; font-weight: bold; }
+        </style>
+    
+        </head>
+        <body>
+            
+
+        <!-- Top Header -->
+        <div class="top-bar">
+            <div class="title-group">
+                <div id="utc-clock" style="font-size: 16px; font-weight: bold; color: #d9534f; margin-bottom: 5px;">27 Jan 2026 06:14:35 UTC</div>
+                <h2 style="color: #0056b3; font-weight: bold;">SKYGUARD</h2>
+                <h1>LOADMASTER FLIGHT SUMMARY</h1>
+                <div style="font-size: 9px; color: #666;">Sky Guard calculates all weight KG, all time UTC.</div>
+            </div>
+            <div class="completed-by">
+                <label>COMPLETED BY</label>
+                <input type="text" value="NURULLLLLLLLAAAAAAAA">
+            </div>
+        </div>
+
+        <!-- Info Grid (Left/Middle Sections) -->
+        <div class="data-grid">
+            <!-- Col 1: Flight Info + Payload -->
+            <div class="col">
+                <div class="box">
+                    <div class="box-header">FLIGHT INFORMATION</div>
+                    <div class="row">
+                        <div class="label">A/C REG</div>
+                        <div class="input-area"><input type="text" value="UK 75057"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">FLIGHT NO</div>
+                        <div class="input-area"><input type="text" value="SGA-2591"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">CREW</div>
+                        <div class="input-area" style="display: flex;">
+                            <input type="text" style="flex: 1; text-align: center;" value="4">
+                            <span style="border-right: 1px solid #ccc; margin: 0 2px;"></span>
+                            <input type="text" style="flex: 1; text-align: center;" value="2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="label">DATE</div>
+                        <div class="input-area"><input type="text" value="23.12.2025"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">EMBARK</div>
+                        <div class="input-area"><input type="text" value="HSA"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">DISEMBARK</div>
+                        <div class="input-area"><input type="text" value="BEG"></div>
+                    </div>
+                </div>
+                <div class="box" style="margin-top: 10px;">
+                    <div class="box-header">PAYLOAD</div>
+                    <div class="row">
+                        <div class="label">NET WGT</div>
+                        <div class="input-area"><input type="text" value="12312312"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">GROSS WGT</div>
+                        <div class="input-area"><input type="text" value="21312312"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">QTY PCS</div>
+                        <div class="input-area"><input type="text" value="21321321"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 2: Movement + Fuel -->
+            <div class="col">
+                <div class="box">
+                    <div class="box-header">AIRCRAFT MOVEMENT</div>
+                    <div class="row">
+                        <div class="label">ED</div>
+                        <div class="input-area"><input type="text" id="move-ed" onchange="calculateDelay()" value="0055"></div>
+                        <div class="label" style="width:30px">AD</div>
+                        <div class="input-area"><input type="text" id="move-ad" onchange="calculateDelay()" value="0203"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">EE</div>
+                        <div class="input-area"><input type="text" value="0529"></div>
+                        <div class="label" style="width:30px">AT</div>
+                        <div class="input-area"><input type="text" value="0218"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">EA</div>
+                        <div class="input-area"><input type="text" value="0624"></div>
+                        <div class="label" style="width:30px">AA</div>
+                        <div class="input-area"><input type="text" value="0740"></div>
+                    </div>
+                </div>
+                <div class="box" style="margin-top: 10px;">
+                    <div class="box-header">DELAY</div>
+                    <div class="row">
+                        <div class="label">TIME</div>
+                        <div class="input-area"><input type="text" id="delay-time" placeholder="HRS   MIN" value="1 HRS 8 MIN"></div>
+                    </div>
+                    <div class="row" style="height: 48px;">
+                        <div class="label">REASON</div>
+                        <div class="input-area"><input type="text" value=""></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 3: Fuel Quantity -->
+            <div class="col">
+                <div class="box" style="height: 100%;">
+                    <div class="box-header">FUEL QUANTITY</div>
+                    <div class="row">
+                        <div class="label">REM.</div>
+                        <div class="input-area"><input type="text" value="123213"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">UPLIFT</div>
+                        <div class="input-area"><input type="text" value="213123"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">DENSITY</div>
+                        <div class="input-area"><input type="text" value="123123"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">BLOCK</div>
+                        <div class="input-area"><input type="text" value="2132131"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">TRIP</div>
+                        <div class="input-area"><input type="text" value="12321321321"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Grid -->
+        <div class="box" style="margin-bottom: 15px;">
+            <div class="box-header" style="display: flex; justify-content: space-between;">
+                <span>LOADING COMPT'S</span>
+                <span>LOADING TIME</span>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                <!-- Lower Deck FWD -->
+                <tbody><tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 60%;">LOWER DECK (FWD)
+                    </td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <span style="padding: 5px;">▶</span>
+                        <input type="text" id="load-fwd-start" style="flex: 1; border: none; text-align: center;" placeholder="Start" onchange="calculateLoadingTotal()" value="2355">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">÷</span>
+                        <input type="text" id="load-fwd-end" style="flex: 1; border: none; text-align: center;" placeholder="End" onchange="calculateLoadingTotal()" value="0020">
+                    </td>
+                </tr>
+                <!-- Main Deck -->
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">MAIN DECK</td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <span style="padding: 5px;">▶</span>
+                        <input type="text" id="load-main-start" style="flex: 1; border: none; text-align: center;" placeholder="Start" onchange="calculateLoadingTotal()" value="0020">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">÷</span>
+                        <input type="text" id="load-main-end" style="flex: 1; border: none; text-align: center;" placeholder="End" onchange="calculateLoadingTotal()" value="0100">
+                    </td>
+                </tr>
+                <!-- Lower Deck Aft -->
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">LOWER DECK (AFT)</td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <span style="padding: 5px;">▶</span>
+                        <input type="text" id="load-aft-start" style="flex: 1; border: none; text-align: center;" placeholder="Start" onchange="calculateLoadingTotal()" value="0100">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">÷</span>
+                        <input type="text" id="load-aft-end" style="flex: 1; border: none; text-align: center;" placeholder="End" onchange="calculateLoadingTotal()" value="0120">
+                    </td>
+                </tr>
+                <!-- Config / Total -->
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">
+                        CONFIG. A (PAG) <input type="checkbox"> &nbsp;&nbsp; M (PMC) <input type="checkbox">
+                    </td>
+                    <td style="border: 1px solid #000; padding: 5px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold;">TOTAL</span>
+                        <div style="display: flex; align-items: center;">
+                            <input type="text" id="load-total-hrs" style="width: 40px; border: none; border-bottom: 1px solid #000; text-align: center; margin-right: 5px;" readonly="" value="1">
+                            <span style="font-size: 10px; margin-right: 10px;">HRS</span>
+                            <input type="text" id="load-total-min" style="width: 40px; border: none; border-bottom: 1px solid #000; text-align: center; margin-right: 5px;" readonly="" value="25">
+                            <span style="font-size: 10px;">MIN</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+
+
+
+        <!-- Main 4-Column Checklist -->
+        <table class="checklist-table">
+            <thead>
+                <tr>
+                    <th class="col-item">#</th>
+                    <th class="col-req">REQUIREMENT / CHECK</th>
+                    <th class="col-status">STATUS</th>
+                    <th class="col-time">TIME</th>
+                    <th class="col-remarks">REMARKS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- DEPARTURE -->
+                <tr>
+                    <td colspan="5" class="section-header">DEPARTURE FLIGHT</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>SERVICE START (Arrival / On-Block)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" id="service-start" placeholder="HHMM" onchange="calculateServiceTotal()" style="text-align: center;" value="2325"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>GROUND SERVICE EQUIPMENT (Ready)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="2335"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>UWS / LOAD-WEIGHT STATEMENT (Received)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="2325"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>CARGO DOCUMENTS (Received/Onboard)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="0110"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>LOADING INSTRUCTION (Fwd'd to Ramp)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="2350"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>CATERING (Provided/Onboard)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="2340"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>REFUELING (Uplift Started)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="2350"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>ALL DOORS (Closed)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="0127"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>OFF-BLOCK / ENGINES START</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" id="service-end" placeholder="HHMM" onchange="calculateServiceTotal()" style="text-align: center;" value="0203"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>SERVICE TIME (Total)</td>
+                    <td class="col-status"></td>
+                    <td><input type="text" id="service-total" placeholder="HRS MIN" readonly="" style="text-align: center;" value="2h 38m"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+
+                <!-- SERVICE CHECKS -->
+                <tr>
+                    <td colspan="5" class="section-header">SERVICE CHECKS</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>CREW BUS</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>LAVATORY</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>POTABLE WATER</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>CABIN CLEANING</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>PUSH BACK / TOWING from <input type="text" style="width: 40px; border: none; border-bottom: 1px solid #333; text-align: center;" value="222"> to
+                        <input type="text" style="width: 40px; border: none; border-bottom: 1px solid #333; text-align: center;" value="F90">
+                    </td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>ASU</td>
+                    <td class="col-status"><input type="checkbox"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="NIL"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>ACU</td>
+                    <td class="col-status"><input type="checkbox"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="NIL"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>GPU</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="1"></td>
+                    <td><input type="text" value="2355 / 0125"></td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>OTHER</td>
+                    <td class="col-status"><input type="checkbox"></td>
+                    <td><input type="text" placeholder="HHMM" style="text-align: center;" value="NIL"></td>
+                    <td><input type="text" value=""></td>
+                </tr>
+
+                <!-- BEFORE LOADING -->
+                <tr>
+                    <td colspan="5" class="section-header">BEFORE LOADING CHECKLIST</td>
+                </tr>
+                <tr>
+                </tr><tr>
+                    <td>20</td>
+                    <td>COCKPIT TIME (Sync)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>SAFETY NET (Check)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td>CARGO COMPARTMENTS (Empty/Clear)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td>GROUND HANDLING COMPANY (Contact)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td>UWS / DEAD-LOAD STATEMENT (Received)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>SPECIAL LOAD &amp; NOTOC (Check)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>LOADING INSTRUCTION (Prepared)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>COCKPIT COORDINATION (Done)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td>CARGO DOCUMENTS (Onboard)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>LOADING (Supervised)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+
+                <!-- AFTER LOADING -->
+                <tr>
+                    <td colspan="5" class="section-header">AFTER LOADING CHECKLIST</td>
+                </tr>
+                <tr>
+                </tr><tr>
+                    <td>30</td>
+                    <td>LOAD &amp; TRIM SHEET (Signed by Capt)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td>REQ'D DOCUMENTS (Handed to Ground)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td>ALL CARGO DOORS (Closed)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+
+                <!-- AFTER LANDING -->
+                <tr>
+                    <td colspan="5" class="section-header">AFTER LANDING CHECKLIST / ARRIVAL SUMMARY</td>
+                </tr>
+                <tr>
+                </tr><tr>
+                    <td>33</td>
+                    <td>REQ'D DOCUMENTS (Handed to Ground)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value=""></td>
+                </tr>
+                <tr>
+                    <td>34</td>
+                    <td>UNLOADING (Supervised)</td>
+                    <td class="col-status"><input type="checkbox" checked="checked"></td>
+                    <td colspan="2"><input type="text" value="0755 / 0900"></td>
+                </tr>
+                <tr>
+                    <td>35</td>
+                    <td>ON BLOCK &amp; STAND</td>
+                    <td class="col-status"></td>
+                    <td><input type="text" placeholder="Block Time" style="text-align: center;" value="0740"></td>
+                    <td><input type="text" placeholder="Stand" value="B9A"></td>
+                </tr>
+                <tr>
+                    <td>36</td>
+                    <td>FUEL QUANTITY</td>
+                    <td class="col-status"></td>
+                    <td><input type="text" disabled="" style="background-color: #f0f0f0; border: none;" value=""></td>
+                    <td><input type="text" placeholder="Qty" value="4200"></td>
+                </tr>
+                <tr>
+                    <td>37</td>
+                    <td>REMARKS</td>
+                    <td class="col-status"></td>
+                    <td><input type="text" disabled="" style="background-color: #f0f0f0; border: none;" value=""></td>
+                    <td><input type="text" value="NIL"></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- GPU OPERATION -->
+        <div class="box" style="margin-top: 20px; margin-bottom: 15px;">
+            <div class="box-header">GPU OPERATION</div>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">AIRPORT
+                        </th>
+                        <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">STAND</th>
+                        <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">START</th>
+                        <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">END</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="TAS"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="F90"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="1200"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="1300"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="BEL"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="222"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="0600"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="0700"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="HSA"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px;"><input type="text" style="width: 100%; border: none;" value="D9A"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="0900"></td>
+                        <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text" style="width: 100%; border: none; text-align: center;" value="0800"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+        </body>
+        </html>
+    

@@ -1,0 +1,503 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --border-color: #333;
+    --bg-color: #f7f7f7;
+    --primary-color: #0056b3;
+    --input-bg: #fff;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+/* --- Mobile First Layout (Default) --- */
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Header */
+.form-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.loading-row {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dual-time {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    align-items: center;
+}
+
+.dual-time .time-wrapper {
+    flex: 1;
+}
+
+/* 2-Column Mobile Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: start;
+}
+
+@media (max-width: 400px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.col-left {
+    grid-column: span 2;
+}
+
+.col-right {
+    grid-column: span 1;
+}
+
+.col-far-right {
+    grid-column: span 1;
+}
+
+.flight-info-grid .row {
+    flex-wrap: wrap;
+}
+
+.logo-area img {
+    max-width: 100px;
+}
+
+.title-area h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.title-area h2 {
+    margin: 0;
+    font-size: 1.4em;
+    color: #555;
+}
+
+.title-area p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.completed-by {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.completed-by label {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.completed-by input {
+    width: 100%;
+    border: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    outline: none;
+}
+
+/* Sections */
+.section-box {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.header-row,
+.subsection-header {
+    background: #e9ecef;
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.row label {
+    font-weight: bold;
+    min-width: 80px;
+}
+
+/* Form Inputs */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.1);
+}
+
+textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+    margin-top: 5px;
+}
+
+/* Time Inputs & Helpers */
+.time-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-grow: 1;
+    max-width: 150px;
+}
+
+.time-input {
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.utc-btn {
+    background: #e9ecef;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.8em;
+    color: #555;
+}
+
+.utc-btn:active {
+    background: #d0d0d0;
+}
+
+/* Services & Checklists (Mobile Friendly) */
+.service-row,
+.check-item {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.service-row input[type="checkbox"],
+.check-item input[type="checkbox"] {
+    transform: scale(1.5);
+    margin: 0;
+}
+
+.desc-input {
+    margin-left: auto;
+}
+
+/* Controls */
+.controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    margin: -10px -10px 20px -10px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* --- PDF Mode (A4 Flex Layout) --- */
+#checklist-content.pdf-mode {
+    width: 1123px !important;
+    /* Fill the fixed 1123px container */
+    height: auto !important;
+    padding: 5px !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+    color: black !important;
+    background: white !important;
+    box-sizing: border-box;
+    display: block !important;
+    overflow: visible !important;
+}
+
+/* Hide non-printable elements */
+.pdf-mode .utc-btn,
+.pdf-mode .no-print,
+.pdf-mode input[type="date"] {
+    display: none !important;
+}
+
+/* --- Main Layout Flex Container --- */
+/* --- Header Config --- */
+.pdf-mode .form-header {
+    display: flex;
+    width: 100% !important;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin-bottom: 0;
+    padding-bottom: 2px;
+    height: auto;
+}
+
+.pdf-mode .logo-area img {
+    max-height: 30px !important;
+    /* Reduced from 50px */
+    width: auto !important;
+}
+
+.pdf-mode .title-area h1 {
+    font-size: 18px !important;
+    margin: 0;
+    line-height: 1;
+}
+
+.pdf-mode .title-area h3 {
+    font-size: 12px !important;
+    margin: 0;
+}
+
+.pdf-mode .title-area p {
+    font-size: 10px !important;
+    margin: 0;
+}
+
+.pdf-mode .completed-by {
+    border: 1px solid black;
+    padding: 1px 4px;
+    flex-shrink: 0;
+    width: 180px;
+    font-size: 12px !important;
+}
+
+.pdf-mode .completed-by label {
+    font-size: 10px !important;
+    display: block;
+    margin-bottom: 0;
+}
+
+.pdf-mode .completed-by input {
+    height: 14px;
+    font-size: 12px;
+}
+
+/* --- Main Layout Flex Container --- */
+.pdf-mode .main-grid {
+    display: flex !important;
+    width: 100% !important;
+    margin-top: 2px;
+    border: 1px solid black;
+    align-items: stretch;
+}
+
+/* Columns */
+.pdf-mode .col-left {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 50% !important;
+    border-right: 1px solid black;
+}
+
+.pdf-mode .col-right {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 50% !important;
+    /* border-right removed for last column */
+}
+
+/* --- Section Styling --- */
+.pdf-mode .section-box {
+    border-bottom: 1px solid black;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    overflow: hidden;
+}
+
+.pdf-mode .section-box:last-child {
+    border-bottom: none;
+}
+
+.pdf-mode .header-row,
+.pdf-mode .subsection-header {
+    background: #e0e0e0;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid black;
+    font-size: 13px !important;
+    /* Slightly smaller header force */
+    padding: 1px 0;
+    text-transform: uppercase;
+    line-height: 1.1;
+    display: block;
+}
+
+/* Compact Rows */
+.pdf-mode .row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #999;
+    padding: 0px 2px;
+    min-height: 18px;
+    /* Force compact height */
+    height: auto;
+    /* Allow growth if needed */
+    gap: 2px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+/* Fix for Departure Flight Overlap */
+.pdf-mode .departure-flight div {
+    padding: 2px !important;
+    height: auto !important;
+    min-height: 20px !important;
+}
+
+/* Inputs & Text */
+.pdf-mode input,
+.pdf-mode textarea,
+.pdf-mode label,
+.pdf-mode span {
+    font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: bold;
+    color: black;
+}
+
+.pdf-mode input[type="text"],
+.pdf-mode input[type="number"] {
+    border: none;
+    border-bottom: 1px dotted #ccc;
+    background: transparent;
+    height: 15px;
+    /* Reduced specific input height */
+    line-height: 15px;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.pdf-mode textarea {
+    min-height: 18px;
+    height: 18px;
+    border: none;
+    resize: none;
+    line-height: 1;
+    width: 100%;
+    display: block;
+    margin: 0;
+    padding: 1px 0;
+}
+
+/* Service Checks & Flex Tables */
+.pdf-mode .service-row,
+.pdf-mode .check-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+    border-bottom: 1px solid #ccc;
+    height: 18px;
+    align-items: center;
+    font-size: 14px !important;
+}
+
+/* Checkboxes */
+.pdf-mode input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+    margin-right: 2px;
+    transform: scale(1);
+    margin-top: 1px;
+}
+
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .controls {
+        display: none;
+    }
+}
