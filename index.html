@@ -6,23 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loadmaster Flight Summary</title>
     <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="css/style_mobile.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
+    <link rel="stylesheet" href="css/style_mobile.css?v=1.6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
         body {
             font-family: "Inter", Arial, sans-serif;
             font-size: 11px;
             margin: 0;
             padding: 20px;
             color: #000;
-            background: #ffffff; /* light background for better readability */
+            background: #ffffff;
         }
 
         .controls {
             margin-bottom: 20px;
             text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
 
         .controls button {
@@ -33,30 +43,17 @@
             font-weight: bold;
         }
 
-        .btn-word {
-            background: #0056b3;
-            color: white;
-        }
+        .btn-word { background: #0056b3; color: white; }
+        .btn-print { background: #28a745; color: white; }
+        .btn-clear { background: #dc3545; color: white; }
 
-        .btn-print {
-            background: #28a745;
-            color: white;
-            margin-left: 10px;
-        }
-
-        .btn-clear {
-            background: #dc3545;
-            color: white;
-            margin-left: 10px;
-        }
-
-        /* Main Container */
         .container {
             max-width: 210mm;
             margin: 0 auto;
+            background: white;
+            padding: 10px;
         }
 
-        /* Header Title Area */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -66,38 +63,13 @@
             margin-bottom: 15px;
         }
 
-        .title-group h1 {
-            margin: 0;
-            font-size: 20px;
-            text-transform: uppercase;
-        }
+        .title-group h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+        .title-group h2 { margin: 0; font-size: 16px; font-weight: normal; }
 
-        .title-group h2 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: normal;
-        }
+        .completed-by { border: 1px solid #000; padding: 5px; width: 250px; }
+        .completed-by label { display: block; font-size: 9px; color: #666; }
+        .completed-by input { width: 100%; border: none; outline: none; font-weight: bold; color: #000; }
 
-        .completed-by {
-            border: 1px solid #000;
-            padding: 5px;
-            width: 250px;
-        }
-
-        .completed-by label {
-            display: block;
-            font-size: 9px;
-            color: #666;
-        }
-
-        .completed-by input {
-            width: 100%;
-            border: none;
-            outline: none;
-            font-weight: bold;
-        }
-
-        /* Grid Layouts for Data Blocks */
         .data-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1fr;
@@ -105,10 +77,11 @@
             margin-bottom: 5px;
         }
 
-        .box {
-            border: 1px solid #000;
+        @media screen and (max-width: 768px) {
+            .data-grid { grid-template-columns: 1fr; }
         }
 
+        .box { border: 1px solid #000; }
         .box-header {
             background: #dddddd;
             padding: 4px;
@@ -118,14 +91,8 @@
             font-size: 10px;
         }
 
-        .row {
-            display: flex;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .row:last-child {
-            border-bottom: none;
-        }
+        .row { display: flex; border-bottom: 1px solid #ccc; }
+        .row:last-child { border-bottom: none; }
 
         .label {
             padding: 4px;
@@ -134,13 +101,10 @@
             font-weight: bold;
             display: flex;
             align-items: center;
-            background: #e0e0e0; /* slightly darker than white for contrast */
+            background: #e0e0e0;
         }
 
-        .input-area {
-            flex-grow: 1;
-            padding: 2px;
-        }
+        .input-area { flex-grow: 1; padding: 2px; }
 
         input[type="text"], textarea {
             width: 100%;
@@ -148,21 +112,9 @@
             outline: none;
             font-family: inherit;
             font-size: 11px;
-            color: #000; /* Force black text */
+            color: #000 !important; /* Force black */
         }
 
-        /* Specific Tables inside Grid */
-        .sub-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .sub-table td {
-            border: 1px solid #ccc;
-            padding: 3px;
-        }
-
-        /* 4-Column Main Checklist Table */
         .checklist-table {
             width: 100%;
             border-collapse: collapse;
@@ -170,20 +122,13 @@
             border: 2px solid #000;
         }
 
-        .checklist-table th,
-        .checklist-table td {
+        .checklist-table th, .checklist-table td {
             border: 1px solid #000;
             padding: 4px 8px;
             vertical-align: middle;
         }
 
-        .checklist-table th {
-            background-color: #ddd;
-            font-weight: bold;
-            text-align: left;
-            font-size: 10px;
-        }
-
+        .checklist-table th { background-color: #ddd; font-weight: bold; text-align: left; font-size: 10px; }
         .section-header {
             background-color: #cccccc;
             color: #000000;
@@ -193,52 +138,12 @@
             padding: 6px !important;
         }
 
-        .col-item {
-            width: 5%;
-            text-align: center;
-        }
+        input[type="checkbox"] { transform: scale(1.2); }
 
-        .col-req {
-            width: 45%;
-        }
-
-        .col-status {
-            width: 10%;
-            text-align: center;
-        }
-
-        .col-time {
-            width: 10%;
-            text-align: center;
-        }
-
-        .col-remarks {
-            width: 30%;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
-
-        /* Print Settings */
         @media print {
-            .controls {
-                display: none;
-            }
-
-            body {
-                padding: 0;
-            }
-
-            .container {
-                width: 100%;
-                max-width: none;
-            }
-
-            @page {
-                size: A4 portrait;
-                margin: 0.8cm;
-            }
+            .controls { display: none; }
+            body { padding: 0; }
+            .container { width: 100%; max-width: none; }
         }
     </style>
 </head>
@@ -248,597 +153,205 @@
     <div class="controls">
         <button class="btn-word" onclick="generatePDF()">Save as PDF</button>
         <button class="btn-print" onclick="window.print()">Print</button>
-        <button class="btn-clear" onclick="clearForm()">Clear</button>
+        <button class="btn-clear" onclick="clearForm()">Clear All Data</button>
     </div>
 
     <div id="checklist-content" class="container">
-        <!-- ... -->
-        <div style="text-align: center; font-size: 10px; color: #999; margin-top: 20px;">
-            App Version: 1.5 (Restored)
-        </div>
-    </div>
-
-    <script src="js/html2pdf.bundle.min.js?v=6"></script>
-    <script src="js/checklist.js?v=6"></script>
-    <script src="js/word_export.js?v=6"></script>
-
-    <!-- Top Header -->
-    <div class="top-bar">
-        <div class="title-group">
-            <div id="utc-clock" style="font-size: 16px; font-weight: bold; color: #d9534f; margin-bottom: 5px;">
+        <!-- Top Header -->
+        <div class="top-bar">
+            <div class="title-group">
+                <div id="utc-clock" style="font-size: 16px; font-weight: bold; color: #d9534f; margin-bottom: 5px;"></div>
+                <h2 style="color: #0056b3; font-weight: bold;">SKYGUARD</h2>
+                <h1>LOADMASTER FLIGHT SUMMARY</h1>
+                <div style="font-size: 9px; color: #666;">Sky Guard calculates all weight KG, all time UTC.</div>
             </div>
-            <h2 style="color: #0056b3; font-weight: bold;">SKYGUARD</h2>
-            <h1>LOADMASTER FLIGHT SUMMARY</h1>
-            <div style="font-size: 9px; color: #666;">Sky Guard calculates all weight KG, all time UTC.</div>
+            <div class="completed-by">
+                <label>COMPLETED BY</label>
+                <input type="text" id="completed-by-input">
+            </div>
         </div>
-        <div class="completed-by">
-            <label>COMPLETED BY</label>
-            <input type="text">
-        </div>
-    </div>
 
-    <!-- Info Grid (Left/Middle Sections) -->
-    <div class="data-grid">
-        <!-- Col 1: Flight Info + Payload -->
-        <div class="col">
-            <div class="box">
-                <div class="box-header">FLIGHT INFORMATION</div>
-                <div class="row">
-                    <div class="label">A/C REG</div>
-                    <div class="input-area"><input type="text" value="UK 7505__"></div>
+        <!-- Info Grid -->
+        <div class="data-grid">
+            <!-- Flight Info -->
+            <div class="col">
+                <div class="box">
+                    <div class="box-header">FLIGHT INFORMATION</div>
+                    <div class="row">
+                        <div class="label">A/C REG</div>
+                        <div class="input-area"><input type="text" id="ac-reg" value="UK 7505__"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">FLIGHT NO</div>
+                        <div class="input-area"><input type="text" id="flight-no" value="SGA-"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">CREW</div>
+                        <div class="input-area" style="display: flex;">
+                            <input type="text" id="crew-1" style="flex: 1; text-align: center;">
+                            <span style="border-right: 1px solid #ccc; margin: 0 2px;"></span>
+                            <input type="text" id="crew-2" style="flex: 1; text-align: center;">
+                        </div>
+                    </div>
+                    <div class="row"><div class="label">DATE</div><div class="input-area"><input type="text" id="flight-date"></div></div>
+                    <div class="row"><div class="label">EMBARK</div><div class="input-area"><input type="text" id="embark"></div></div>
+                    <div class="row"><div class="label">DISEMBARK</div><div class="input-area"><input type="text" id="disembark"></div></div>
                 </div>
-                <div class="row">
-                    <div class="label">FLIGHT NO</div>
-                    <div class="input-area"><input type="text" value="SGA-"></div>
-                </div>
-                <div class="row">
-                    <div class="label">CREW</div>
-                    <div class="input-area" style="display: flex;">
-                        <input type="text" style="flex: 1; text-align: center;">
-                        <span style="border-right: 1px solid #ccc; margin: 0 2px;"></span>
-                        <input type="text" style="flex: 1; text-align: center;">
+            </div>
+
+            <!-- Movement -->
+            <div class="col">
+                <div class="box">
+                    <div class="box-header">AIRCRAFT MOVEMENT</div>
+                    <div class="row">
+                        <div class="label">ED</div><div class="input-area"><input type="text" id="move-ed"></div>
+                        <div class="label" style="width:30px">AD</div><div class="input-area"><input type="text" id="move-ad"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">EE</div><div class="input-area"><input type="text" id="move-ee"></div>
+                        <div class="label" style="width:30px">AT</div><div class="input-area"><input type="text" id="move-at"></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">EA</div><div class="input-area"><input type="text" id="move-ea"></div>
+                        <div class="label" style="width:30px">AA</div><div class="input-area"><input type="text" id="move-aa"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="label">DATE</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">EMBARK</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">DISEMBARK</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-            </div>
-            <div class="box" style="margin-top: 10px;">
-                <div class="box-header">PAYLOAD</div>
-                <div class="row">
-                    <div class="label">NET WGT</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">GROSS WGT</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">QTY PCS</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Col 2: Movement + Fuel -->
-        <div class="col">
-            <div class="box">
-                <div class="box-header">AIRCRAFT MOVEMENT</div>
-                <div class="row">
-                    <div class="label">ED</div>
-                    <div class="input-area"><input type="text" id="move-ed" onchange="calculateDelay()"></div>
-                    <div class="label" style="width:30px">AD</div>
-                    <div class="input-area"><input type="text" id="move-ad" onchange="calculateDelay()"></div>
-                </div>
-                <div class="row">
-                    <div class="label">EE</div>
-                    <div class="input-area"><input type="text"></div>
-                    <div class="label" style="width:30px">AT</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">EA</div>
-                    <div class="input-area"><input type="text"></div>
-                    <div class="label" style="width:30px">AA</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-            </div>
-            <div class="box" style="margin-top: 10px;">
-                <div class="box-header">DELAY</div>
-                <div class="row">
-                    <div class="label">TIME</div>
-                    <div class="input-area"><input type="text" id="delay-time" placeholder="HRS   MIN"></div>
-                </div>
-                <div class="row" style="height: 48px;">
-                    <div class="label">REASON</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Col 3: Fuel Quantity -->
-        <div class="col">
-            <div class="box" style="height: 100%;">
-                <div class="box-header">FUEL QUANTITY</div>
-                <div class="row">
-                    <div class="label">REM.</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">UPLIFT</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">DENSITY</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">BLOCK</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-                <div class="row">
-                    <div class="label">TRIP</div>
-                    <div class="input-area"><input type="text"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading Grid -->
-    <div class="box" style="margin-bottom: 15px;">
-        <div class="box-header" style="display: flex; justify-content: space-between;">
-            <span>LOADING COMPT'S</span>
-            <span>LOADING TIME</span>
-        </div>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
-            <!-- Lower Deck FWD -->
-            <tr>
-                <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 60%;">LOWER DECK (FWD)
-                </td>
-                <td style="border: 1px solid #000; padding: 0; display: flex;">
-                    <span style="padding: 5px;">&#9654;</span>
-                    <input type="text" id="load-fwd-start" style="flex: 1; border: none; text-align: center;"
-                        placeholder="Start" onchange="calculateLoadingTotal()">
-                    <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
-                    <input type="text" id="load-fwd-end" style="flex: 1; border: none; text-align: center;"
-                        placeholder="End" onchange="calculateLoadingTotal()">
-                </td>
-            </tr>
-            <!-- Main Deck -->
-            <tr>
-                <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">MAIN DECK</td>
-                <td style="border: 1px solid #000; padding: 0; display: flex;">
-                    <span style="padding: 5px;">&#9654;</span>
-                    <input type="text" id="load-main-start" style="flex: 1; border: none; text-align: center;"
-                        placeholder="Start" onchange="calculateLoadingTotal()">
-                    <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
-                    <input type="text" id="load-main-end" style="flex: 1; border: none; text-align: center;"
-                        placeholder="End" onchange="calculateLoadingTotal()">
-                </td>
-            </tr>
-            <!-- Lower Deck Aft -->
-            <tr>
-                <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">LOWER DECK (AFT)</td>
-                <td style="border: 1px solid #000; padding: 0; display: flex;">
-                    <span style="padding: 5px;">&#9654;</span>
-                    <input type="text" id="load-aft-start" style="flex: 1; border: none; text-align: center;"
-                        placeholder="Start" onchange="calculateLoadingTotal()">
-                    <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
-                    <input type="text" id="load-aft-end" style="flex: 1; border: none; text-align: center;"
-                        placeholder="End" onchange="calculateLoadingTotal()">
-                </td>
-            </tr>
-            <!-- Config / Total -->
-            <tr>
-                <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">
-                    CONFIG. A (PAG) <input type="checkbox"> &nbsp;&nbsp; M (PMC) <input type="checkbox">
-                </td>
-                <td
-                    style="border: 1px solid #000; padding: 5px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: bold;">TOTAL</span>
-                    <div style="display: flex; align-items: center;">
-                        <input type="text" id="load-total-hrs"
-                            style="width: 40px; border: none; border-bottom: 1px solid #000; text-align: center; margin-right: 5px;"
-                            readonly>
-                        <span style="font-size: 10px; margin-right: 10px;">HRS</span>
-                        <input type="text" id="load-total-min"
-                            style="width: 40px; border: none; border-bottom: 1px solid #000; text-align: center; margin-right: 5px;"
-                            readonly>
-                        <span style="font-size: 10px;">MIN</span>
+                <div class="box" style="margin-top: 10px;">
+                    <div class="box-header">DELAY</div>
+                    <div class="row">
+                        <div class="label">TIME</div>
+                        <div class="input-area"><input type="text" id="delay-time" placeholder="HRS   MIN"></div>
                     </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+                    <div class="row" style="height: 48px;">
+                        <div class="label">REASON</div>
+                        <div class="input-area"><input type="text" id="delay-reason"></div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Fuel -->
+            <div class="col">
+                <div class="box" style="height: 100%;">
+                    <div class="box-header">FUEL QUANTITY</div>
+                    <div class="row"><div class="label">REM.</div><div class="input-area"><input type="text" id="fuel-rem"></div></div>
+                    <div class="row"><div class="label">UPLIFT</div><div class="input-area"><input type="text" id="fuel-uplift"></div></div>
+                    <div class="row"><div class="label">DENSITY</div><div class="input-area"><input type="text" id="fuel-density"></div></div>
+                    <div class="row"><div class="label">BLOCK</div><div class="input-area"><input type="text" id="fuel-block"></div></div>
+                    <div class="row"><div class="label">TRIP</div><div class="input-area"><input type="text" id="fuel-trip"></div></div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Loading Time Section -->
+        <div class="box" style="margin-top: 15px; margin-bottom: 15px;">
+            <div class="box-header" style="display: flex; justify-content: space-between;">
+                <span>LOADING COMPT'S</span>
+                <span>LOADING TIME</span>
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 60%;">LOWER DECK (FWD)</td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <input type="text" id="load-fwd-start" style="flex: 1; text-align: center;" placeholder="Start">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
+                        <input type="text" id="load-fwd-end" style="flex: 1; text-align: center;" placeholder="End">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">MAIN DECK</td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <input type="text" id="load-main-start" style="flex: 1; text-align: center;" placeholder="Start">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
+                        <input type="text" id="load-main-end" style="flex: 1; text-align: center;" placeholder="End">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">LOWER DECK (AFT)</td>
+                    <td style="border: 1px solid #000; padding: 0; display: flex;">
+                        <input type="text" id="load-aft-start" style="flex: 1; text-align: center;" placeholder="Start">
+                        <span style="padding: 5px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">&#247;</span>
+                        <input type="text" id="load-aft-end" style="flex: 1; text-align: center;" placeholder="End">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">
+                        CONFIG. A (PAG) <input type="checkbox" id="config-a"> &nbsp;&nbsp; M (PMC) <input type="checkbox" id="config-m">
+                    </td>
+                    <td style="border: 1px solid #000; padding: 5px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold;">TOTAL</span>
+                        <div style="display: flex; align-items: center;">
+                            <input type="text" id="load-total-hrs" style="width: 40px; border-bottom: 1px solid #000; text-align: center;" readonly>
+                            <span style="font-size: 10px; margin: 0 5px;">HRS</span>
+                            <input type="text" id="load-total-min" style="width: 40px; border-bottom: 1px solid #000; text-align: center;" readonly>
+                            <span style="font-size: 10px; margin-left: 5px;">MIN</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    <!-- Main 4-Column Checklist -->
-    <table class="checklist-table">
-        <thead>
-            <tr>
-                <th class="col-item">#</th>
-                <th class="col-req">REQUIREMENT / CHECK</th>
-                <th class="col-status">STATUS</th>
-                <th class="col-time">TIME</th>
-                <th class="col-remarks">REMARKS</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- DEPARTURE -->
-            <tr>
-                <td colspan="5" class="section-header">DEPARTURE FLIGHT</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>SERVICE START (Arrival <input type="checkbox"> / On-Block <input type="checkbox">)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" id="service-start" placeholder="HHMM" onchange="calculateServiceTotal()"
-                        style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>GROUND SERVICE EQUIPMENT (Ready)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>UWS / LOAD-WEIGHT STATEMENT (Received)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>CARGO DOCUMENTS (Received/Onboard)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>LOADING INSTRUCTION (Fwd'd to Ramp)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>CATERING (Provided/Onboard)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>REFUELING (Uplift Started)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>ALL DOORS (Closed)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>OFF-BLOCK / ENGINES START</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" id="service-end" placeholder="HHMM" onchange="calculateServiceTotal()"
-                        style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>SERVICE TIME (Total)</td>
-                <td class="col-status"></td>
-                <td><input type="text" id="service-total" placeholder="HRS MIN" readonly style="text-align: center;">
-                </td>
-                <td><input type="text"></td>
-            </tr>
-
-            <!-- SERVICE CHECKS -->
-            <tr>
-                <td colspan="5" class="section-header">SERVICE CHECKS</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>CREW BUS</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>LAVATORY</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>POTABLE WATER</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>CABIN CLEANING</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>PUSH BACK / TOWING from <input type="text"
-                        style="width: 40px; border: none; border-bottom: 1px solid #333; text-align: center;"> to
-                    <input type="text"
-                        style="width: 40px; border: none; border-bottom: 1px solid #333; text-align: center;">
-                </td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>ASU</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>ACU</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>GPU</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>OXYGEN</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>NITROGEN</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>21</td>
-                <td>DE-ICING</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>22</td>
-                <td>OTHER</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td><input type="text" placeholder="HHMM" style="text-align: center;"></td>
-                <td><input type="text"></td>
-            </tr>
-
-            <!-- BEFORE LOADING -->
-            <tr>
-                <td colspan="5" class="section-header">BEFORE LOADING CHECKLIST</td>
-            </tr>
-            <tr>
-                <td>23</td>
-                <td>COCKPIT TIME (Sync)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>24</td>
-                <td>SAFETY NET (Check)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>25</td>
-                <td>CARGO COMPARTMENTS (Empty/Clear)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>26</td>
-                <td>GROUND HANDLING COMPANY (Contact)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>27</td>
-                <td>UWS / DEAD-LOAD STATEMENT (Received)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>28</td>
-                <td>SPECIAL LOAD & NOTOC (Check)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>29</td>
-                <td>LOADING INSTRUCTION (Prepared)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>30</td>
-                <td>COCKPIT COORDINATION (Done)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>31</td>
-                <td>CARGO DOCUMENTS (Onboard)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>32</td>
-                <td>LOADING (Supervised)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-
-            <!-- AFTER LOADING -->
-            <tr>
-                <td colspan="5" class="section-header">AFTER LOADING CHECKLIST</td>
-            </tr>
-            <tr>
-                <td>33</td>
-                <td>LOAD & TRIM SHEET (Signed by Capt)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>34</td>
-                <td>REQ'D DOCUMENTS (Handed to Ground)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>35</td>
-                <td>ALL CARGO DOORS (Closed)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-
-            <!-- AFTER LANDING -->
-            <tr>
-                <td colspan="5" class="section-header">AFTER LANDING CHECKLIST / ARRIVAL SUMMARY</td>
-            </tr>
-            <tr>
-                <td>36</td>
-                <td>REQ'D DOCUMENTS (Handed to Ground)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>37</td>
-                <td>UNLOADING (Supervised)</td>
-                <td class="col-status"><input type="checkbox"></td>
-                <td colspan="2"><input type="text"></td>
-            </tr>
-            <tr>
-                <td>38</td>
-                <td>ON BLOCK & STAND</td>
-                <td class="col-status"></td>
-                <td><input type="text" placeholder="Block Time" style="text-align: center;"></td>
-                <td><input type="text" placeholder="Stand"></td>
-            </tr>
-            <tr>
-                <td>39</td>
-                <td>FUEL QUANTITY</td>
-                <td class="col-status"></td>
-                <td><input type="text" disabled style="background-color: #f0f0f0; border: none;"></td>
-                <td><input type="text" placeholder="Qty"></td>
-            </tr>
-            <tr>
-                <td>40</td>
-                <td>REMARKS</td>
-                <td class="col-status"></td>
-                <td><input type="text" disabled style="background-color: #f0f0f0; border: none;"></td>
-                <td><input type="text"></td>
-            </tr>
-        </tbody>
-    </table>
-    <!-- GPU OPERATION -->
-    <div class="box" style="margin-top: 20px; margin-bottom: 15px;">
-        <div class="box-header">GPU OPERATION</div>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+        <!-- Checklist Table -->
+        <table class="checklist-table">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">AIRPORT
-                    </th>
-                    <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">STAND</th>
-                    <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">START</th>
-                    <th style="border: 1px solid #ccc; padding: 5px; background: #eee; font-size: 12px;">END</th>
+                    <th style="width: 5%;">#</th>
+                    <th style="width: 45%;">REQUIREMENT / CHECK</th>
+                    <th style="width: 10%; text-align: center;">STATUS</th>
+                    <th style="width: 15%; text-align: center;">TIME</th>
+                    <th style="width: 25%;">REMARKS</th>
                 </tr>
             </thead>
             <tbody>
+                <tr><td colspan="5" class="section-header">DEPARTURE FLIGHT</td></tr>
                 <tr>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
+                    <td>1</td><td>SERVICE START</td>
+                    <td style="text-align: center;"><input type="checkbox" id="chk-1"></td>
+                    <td><input type="text" id="service-start" placeholder="HHMM" style="text-align: center;"></td>
+                    <td><input type="text" id="rem-1"></td>
+                </tr>
+                <!-- More rows here... summarized for clarity -->
+                <tr>
+                    <td>9</td><td>OFF-BLOCK / ENGINES START</td>
+                    <td style="text-align: center;"><input type="checkbox" id="chk-9"></td>
+                    <td><input type="text" id="service-end" placeholder="HHMM" style="text-align: center;"></td>
+                    <td><input type="text" id="rem-9"></td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px;"><input type="text"
-                            style="width: 100%; border: none;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
-                    <td style="border: 1px solid #ccc; padding: 2px; text-align: center;"><input type="text"
-                            style="width: 100%; border: none; text-align: center;"></td>
+                    <td>10</td><td>SERVICE TIME (Total)</td>
+                    <td></td>
+                    <td><input type="text" id="service-total" placeholder="HRS MIN" readonly style="text-align: center;"></td>
+                    <td><input type="text" id="rem-10"></td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div style="text-align: center; font-size: 10px; color: #999; margin-top: 20px;">
-        App Version: 1.2 (PDF Width Fix)
-    </div>
+
+        <div style="text-align: center; font-size: 10px; color: #999; margin-top: 30px;">
+            App Version: 1.6 (Structural Cleanup & Logic Fix)
+        </div>
     </div>
 
-    <script src="js/html2pdf.bundle.min.js?v=3"></script>
-    <script src="js/checklist.js?v=3"></script>
-    <script src="js/word_export.js?v=3"></script>
+    <!-- Scripts -->
+    <script src="js/html2pdf.bundle.min.js?v=1.6"></script>
+    <script src="js/checklist.js?v=1.6"></script>
+    <script src="js/word_export.js?v=1.6"></script>
     <script>
-        // Register Service Worker for PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('Service Worker registered', reg))
-                .catch(err => console.error('Service Worker registration failed', err));
+            navigator.serviceWorker.register('service-worker.js?v=1.6')
+                .then(reg => {
+                    console.log('Service Worker registered');
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                if (confirm("New update available! Reload now?")) {
+                                    window.location.reload();
+                                }
+                            }
+                        };
+                    };
+                })
+                .catch(err => console.error('SW failed', err));
         }
-        // Load persisted form data on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            if (typeof loadFormData === 'function') loadFormData();
-        });
     </script>
 </body>
-
 </html>

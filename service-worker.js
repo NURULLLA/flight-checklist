@@ -1,17 +1,18 @@
-// service-worker.js - Simple cache for offline support
-const CACHE_NAME = 'flight-checklist-v1';
+const CACHE_NAME = 'flight-checklist-v1.6';
 const URLs_TO_CACHE = [
-  './checklist.html',
+  './',
+  './index.html',
   './manifest.json',
-  './css/style_mobile.css',
-  './js/checklist.js',
-  './js/html2pdf.bundle.min.js',
-  './js/word_export.js',
+  './css/style_mobile.css?v=1.6',
+  './js/checklist.js?v=1.6',
+  './js/html2pdf.bundle.min.js?v=1.6',
+  './js/word_export.js?v=1.6',
   './img/icon-192.png',
   './img/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(URLs_TO_CACHE))
@@ -25,13 +26,25 @@ self.addEventListener('activate', event => {
         cacheNames.filter(name => name !== CACHE_NAME)
           .map(name => caches.delete(name))
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(response => {
+        if (response) return response;
+        return fetch(event.request).then(response => {
+           if(!response || response.status !== 200 || response.type !== 'basic') {
+             return response;
+           }
+           const responseToCache = response.clone();
+           caches.open(CACHE_NAME).then(cache => {
+             cache.put(event.request, responseToCache);
+           });
+           return response;
+        });
+      })
   );
 });

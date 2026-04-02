@@ -1,4 +1,5 @@
-/* JS for Checklist App */
+/* JS for Checklist App v1.6 */
+console.log("Flight Checklist v1.6 Loaded");
 
 function getUTCTime() {
     const now = new Date();
