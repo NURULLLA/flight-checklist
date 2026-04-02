@@ -1,0 +1,98 @@
+/* style_mobile.css - Premium Mobile UI */
+/* Import Inter font already loaded in HTML */
+
+/* Dark theme base */
+body {
+    background: #121212;
+    color: #e0e0e0;
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass‑morphism container */
+#app, .container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Responsive grid for data blocks */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+/* Buttons with micro‑animations */n.btn-word, .btn-print, .btn-clear {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-word:hover, .btn-print:hover, .btn-clear:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Input styling */
+input[type="text"], textarea {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    color: #e0e0e0;
+    padding: 0.4rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #0d6efd;
+}
+
+/* Table styling for checklist */n.checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.checklist-table th, .checklist-table td {
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.5rem;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.checklist-table th {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.section-header {
+    background: #1e1e1e;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+/* Mobile breakpoints */
+@media (max-width: 768px) {
+    .top-bar { flex-direction: column; align-items: flex-start; }
+    .controls { text-align: left; margin-bottom: 1rem; }
+    .container { padding: 0.5rem; }
+}

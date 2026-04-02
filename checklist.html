@@ -5,13 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loadmaster Flight Summary</title>
-    <style>
+    <link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style_mobile.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
         body {
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: "Inter", Arial, sans-serif;
             font-size: 11px;
             margin: 0;
             padding: 20px;
             color: #000;
+            background: #ffffff; /* light background for better readability */
         }
 
         .controls {
@@ -104,7 +110,7 @@
         }
 
         .box-header {
-            background: #eee;
+            background: #dddddd;
             padding: 4px;
             font-weight: bold;
             text-align: center;
@@ -128,7 +134,7 @@
             font-weight: bold;
             display: flex;
             align-items: center;
-            background: #fafafa;
+            background: #e0e0e0; /* slightly darker than white for contrast */
         }
 
         .input-area {
@@ -178,8 +184,8 @@
         }
 
         .section-header {
-            background-color: #333;
-            color: white;
+            background-color: #cccccc;
+            color: #000000;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
@@ -820,6 +826,18 @@
     <script src="js/html2pdf.bundle.min.js?v=3"></script>
     <script src="js/checklist.js?v=3"></script>
     <script src="js/word_export.js?v=3"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.error('Service Worker registration failed', err));
+        }
+        // Load persisted form data on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof loadFormData === 'function') loadFormData();
+        });
+    </script>
 </body>
 
 </html>
