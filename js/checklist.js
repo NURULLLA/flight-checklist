@@ -12,6 +12,7 @@ function setUTCTime(btnElement) {
     const input = wrapper.querySelector('input');
     if (input) {
         input.value = getUTCTime();
+        saveFormData(); // Save when time is set
     }
 }
 
@@ -25,43 +26,35 @@ function clearForm() {
                 input.value = '';
             }
         });
+        localStorage.removeItem('flightChecklistData');
     }
 }
 
 function generatePDF() {
-    // Check if html2pdf is loaded
     if (typeof html2pdf === 'undefined') {
         alert("Error: html2pdf library not loaded. Please check your internet connection or local file.");
         return;
     }
 
-    // Feedback to user
     const originalBtn = document.querySelector('.btn-word');
     if (originalBtn) originalBtn.innerText = "Generating...";
 
-
     const originalElement = document.getElementById('checklist-content');
-
-    // 1. Create a deep clone of the element
     const clone = originalElement.cloneNode(true);
 
-    // 2. Wrap clone in a fixed-width container to enforce A4 Landscape proportions
-    // Crucial: Use min-width to prevent browser compression on small screens
     const container = document.createElement('div');
     container.style.position = 'absolute';
     container.style.top = '0';
     container.style.left = '0';
     container.style.width = '794px';
-    container.style.minWidth = '794px'; // Force non-collapsed width
+    container.style.minWidth = '794px';
     container.style.zIndex = '-9999';
     container.style.backgroundColor = '#ffffff';
     container.appendChild(clone);
     document.body.appendChild(container);
 
-    // 3. Apply PDF mode class to the CLONE only
     clone.classList.add('pdf-mode');
 
-    // 4. Manually sync values from original to clone
     const originalInputs = originalElement.querySelectorAll('input, textarea, select');
     const cloneInputs = clone.querySelectorAll('input, textarea, select');
 
@@ -71,10 +64,6 @@ function generatePDF() {
 
         if (copy.tagName === 'SELECT') {
             copy.value = orig.value;
-            const options = copy.querySelectorAll('option');
-            options.forEach(opt => {
-                if (opt.value === orig.value) opt.setAttribute('selected', 'selected');
-            });
         } else if (copy.type === 'checkbox' || copy.type === 'radio') {
             copy.checked = orig.checked;
             if (orig.checked) copy.setAttribute('checked', 'checked');
@@ -85,31 +74,14 @@ function generatePDF() {
         }
     });
 
-    // 5. Handle Date Display Logic on Clone
-    const dateInput = clone.querySelector('#flight-date-input');
-    const dateDisplay = clone.querySelector('#pdf-date-display');
-    if (dateInput && dateDisplay && dateInput.value) {
-        const parts = dateInput.value.split('-');
-        if (parts.length === 3) {
-            dateDisplay.innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
-        } else {
-            dateDisplay.innerText = dateInput.value;
-        }
-    } else if (dateDisplay) {
-        dateDisplay.innerText = '';
-    }
-
-    // 6. Generate PDF from Clone
-    // We explicitly tell html2canvas the dimensions to capture
     const opt = {
         margin: 2,
         filename: `SGA_Flight_Summary_${new Date().toISOString().slice(0, 10)}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
             scale: 2,
-            scale: 2,
-            width: 794, // Force capture width
-            windowWidth: 794, // Simulate desktop window
+            width: 794,
+            windowWidth: 794,
             scrollX: 0,
             scrollY: 0
         },
@@ -117,10 +89,8 @@ function generatePDF() {
         enableLinks: true
     };
 
-    // Wait 500ms to ensure clone is rendered
     setTimeout(() => {
         html2pdf().set(opt).from(clone).save().then(() => {
-            // 7. Cleanup
             document.body.removeChild(container);
             if (originalBtn) originalBtn.innerText = "Save as PDF";
         }).catch(err => {
@@ -135,33 +105,22 @@ function generatePDF() {
 function calculateServiceTotal() {
     const startStr = document.getElementById('service-start').value;
     const endStr = document.getElementById('service-end').value;
+    const target = document.getElementById('service-total');
 
-    if (!startStr || !endStr) return; // Wait for both
+    if (!startStr || !endStr || !target) return;
 
-    // Helper to parse HHMM
-    function parseTime(tStr) {
-        if (tStr.length !== 4) return null;
-        const h = parseInt(tStr.substring(0, 2), 10);
-        const m = parseInt(tStr.substring(2, 4), 10);
-        if (isNaN(h) || isNaN(m)) return null;
-        return h * 60 + m;
-    }
-
-    let startMin = parseTime(startStr);
-    let endMin = parseTime(endStr);
+    const startMin = robustParseTime(startStr);
+    const endMin = robustParseTime(endStr);
 
     if (startMin === null || endMin === null) return;
 
-    // Handle overnight (e.g. Start 2300, End 0100)
     let diff = endMin - startMin;
-    if (diff < 0) {
-        diff += 24 * 60;
-    }
+    if (diff < 0) diff += 1440;
 
     const diffH = Math.floor(diff / 60);
     const diffM = diff % 60;
 
-    document.getElementById('service-total').value = `${diffH}h ${diffM}m`;
+    target.value = `${diffH}h ${diffM}m`;
 }
 
 function calculateLoadingTotal() {
@@ -171,64 +130,42 @@ function calculateLoadingTotal() {
     let startMins = [];
     let endMins = [];
 
-    function parseTime(tStr) {
-        // Strip non-digits
-        const cleanStr = (tStr || '').replace(/\D/g, '');
-        if (cleanStr.length !== 4) return null;
-        const h = parseInt(cleanStr.substring(0, 2), 10);
-        const m = parseInt(cleanStr.substring(2, 4), 10);
-        if (isNaN(h) || isNaN(m)) return null;
-        return h * 60 + m;
-    }
-
-    // 1. Gather all valid times
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < startIds.length; i++) {
         const sVal = document.getElementById(startIds[i]).value;
         const eVal = document.getElementById(endIds[i]).value;
-
-        const sMin = parseTime(sVal);
-        const eMin = parseTime(eVal);
-
+        const sMin = robustParseTime(sVal);
+        const eMin = robustParseTime(eVal);
         if (sMin !== null) startMins.push(sMin);
         if (eMin !== null) endMins.push(eMin);
     }
 
-    if (startMins.length === 0 || endMins.length === 0) return;
+    const hrsEl = document.getElementById('load-total-hrs');
+    const minEl = document.getElementById('load-total-min');
+    if (!hrsEl || !minEl) return;
 
-    // 2. Overnight Heuristic
-    // Combine all to check range
+    if (startMins.length === 0 || endMins.length === 0) {
+        hrsEl.value = '';
+        minEl.value = '';
+        return;
+    }
+
     const allTimes = [...startMins, ...endMins];
     const hasLate = allTimes.some(t => t > 1080); // > 18:00
     const hasEarly = allTimes.some(t => t < 540);  // < 09:00
 
-    // If we have both Late Night and Early Morning times, shift Early times to next day
     if (hasLate && hasEarly) {
         startMins = startMins.map(t => (t < 540) ? t + 1440 : t);
         endMins = endMins.map(t => (t < 540) ? t + 1440 : t);
     }
 
-    // 3. Find Global Min Start and Global Max End
-    // Note: We use Math.min/max on the potentially shifted values
     const minStart = Math.min(...startMins);
     const maxEnd = Math.max(...endMins);
 
-    // 4. Calculate Difference
-    // If somehow maxEnd is still less than minStart (shouldn't happen with heuristic, but safe fallback), add 24h
-    // But with the heuristic above, 23:55 (1435) and 00:20 (1460) are handled.
-    // Case: Start 00:10, End 00:50. Late=false, Early=true. No shift. Diff 40. Correct.
-
     let diff = maxEnd - minStart;
+    if (diff < 0) diff += 1440;
 
-    // Safety check for weird input order where Max End < Min Start roughly
-    if (diff < 0) {
-        diff += 1440;
-    }
-
-    const diffH = Math.floor(diff / 60);
-    const diffM = diff % 60;
-
-    document.getElementById('load-total-hrs').value = diffH;
-    document.getElementById('load-total-min').value = diffM;
+    hrsEl.value = Math.floor(diff / 60);
+    minEl.value = diff % 60;
 }
 
 function calculateDelay() {
@@ -236,47 +173,37 @@ function calculateDelay() {
     const adStr = document.getElementById('move-ad').value;
     const delayInput = document.getElementById('delay-time');
 
-    if (!edStr || !adStr) return;
+    if (!edStr || !adStr || !delayInput) return;
 
-    function parseTime(tStr) {
-        // Strip non-digits just in case
-        const cleanStr = tStr.replace(/\D/g, '');
-        if (cleanStr.length !== 4) return null;
-        const h = parseInt(cleanStr.substring(0, 2), 10);
-        const m = parseInt(cleanStr.substring(2, 4), 10);
-        if (isNaN(h) || isNaN(m)) return null;
-        return h * 60 + m;
-    }
-
-    const edMin = parseTime(edStr);
-    const adMin = parseTime(adStr);
+    const edMin = robustParseTime(edStr);
+    const adMin = robustParseTime(adStr);
 
     if (edMin === null || adMin === null) return;
 
     let diff = adMin - edMin;
-
-    // Overnight scenario assumption:
-    // If Delay > 12 hours negative (e.g. ED 2300, AD 0100 -> -22 hours), assume next day (+24h).
-    // If Delay is small negative (e.g. Early arrival ED 1400, AD 1350), it is not a delay.
-
-    // However, usually we care about DELAY (Positive difference).
-    // If AD < ED, flight left early -> No delay? Or negative delay?
-    // Let's assume standard logic: 
-    // If AD is shortly after ED, it's a delay.
-    // If AD is shortly before ED, it's early (Delay 0?).
-    // If AD is '0100' and ED is '2300', it's a 2 hour delay.
-
-    if (diff < -720) { // If diff is less than -12 hours, assume overnight wrap
-        diff += 1440;
-    }
+    if (diff < -720) diff += 1440;
 
     if (diff > 0) {
-        const diffH = Math.floor(diff / 60);
-        const diffM = diff % 60;
-        delayInput.value = `${diffH} HRS ${diffM} MIN`;
+        delayInput.value = `${Math.floor(diff / 60)} HRS ${diff % 60} MIN`;
     } else {
-        delayInput.value = ''; // No delay or early
+        delayInput.value = '';
     }
+}
+
+function robustParseTime(tStr) {
+    const cleanStr = (tStr || '').replace(/\D/g, '');
+    let h, m;
+    if (cleanStr.length === 3) {
+        h = parseInt(cleanStr.substring(0, 1), 10);
+        m = parseInt(cleanStr.substring(1, 3), 10);
+    } else if (cleanStr.length === 4) {
+        h = parseInt(cleanStr.substring(0, 2), 10);
+        m = parseInt(cleanStr.substring(2, 4), 10);
+    } else {
+        return null;
+    }
+    if (isNaN(h) || isNaN(m) || h >= 24 || m >= 60) return null;
+    return h * 60 + m;
 }
 
 function updateUTCClock() {
@@ -291,15 +218,70 @@ function updateUTCClock() {
         second: '2-digit',
         hour12: false
     };
-    // format: "24 Jan 2025 12:34:56 UTC"
     const timeString = now.toLocaleString('en-GB', options).replace(',', '') + ' UTC';
     const clockEl = document.getElementById('utc-clock');
-    if (clockEl) {
-        clockEl.innerText = timeString;
-    }
+    if (clockEl) clockEl.innerText = timeString;
 }
 
-// Start clock
 setInterval(updateUTCClock, 1000);
 updateUTCClock();
-\n// Persistence Functions\nfunction saveFormData() {\n    const data = {};\n    const inputs = document.querySelectorAll('input, textarea');\n    inputs.forEach(input => {\n        if (input.type === 'checkbox' || input.type === 'radio') {\n            data[input.id || input.name] = input.checked;\n        } else {\n            data[input.id || input.name] = input.value;\n        }\n    });\n    localStorage.setItem('flightChecklistData', JSON.stringify(data));\n}\n\nfunction loadFormData() {\n    const stored = localStorage.getItem('flightChecklistData');\n    if (!stored) return;\n    const data = JSON.parse(stored);\n    const inputs = document.querySelectorAll('input, textarea');\n    inputs.forEach(input => {\n        const key = input.id || input.name;\n        if (data.hasOwnProperty(key)) {\n            if (input.type === 'checkbox' || input.type === 'radio') {\n                input.checked = data[key];\n            } else {\n                input.value = data[key];\n            }\n        }\n    });\n}\n\n// Auto‑save on change\ndocument.addEventListener('input', function(e) {\n    if (e.target.matches('input, textarea')) {\n        saveFormData();\n    }\n});\n\n// Also save on checkbox change (covers click events)\ndocument.addEventListener('change', function(e) {\n    if (e.target.matches('input[type=\"checkbox\"], input[type=\"radio\"]')) {\n        saveFormData();\n    }\n});
+
+function saveFormData() {
+    const data = {};
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        const key = input.id || input.name;
+        if (!key) return;
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            data[key] = input.checked;
+        } else {
+            data[key] = input.value;
+        }
+    });
+    localStorage.setItem('flightChecklistData', JSON.stringify(data));
+}
+
+function loadFormData() {
+    const stored = localStorage.getItem('flightChecklistData');
+    if (!stored) return;
+    const data = JSON.parse(stored);
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        const key = input.id || input.name;
+        if (key && data.hasOwnProperty(key)) {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = data[key];
+            } else {
+                input.value = data[key];
+            }
+        }
+    });
+    // Trigger calculations
+    calculateServiceTotal();
+    calculateLoadingTotal();
+    calculateDelay();
+}
+
+// Auto-save and auto-calculate
+document.addEventListener('input', function(e) {
+    if (e.target.matches('input, textarea')) {
+        saveFormData();
+        const id = e.target.id;
+        if (id.includes('service')) calculateServiceTotal();
+        if (id.includes('load')) calculateLoadingTotal();
+        if (id.includes('move')) calculateDelay();
+    }
+});
+
+document.addEventListener('change', function(e) {
+    if (e.target.matches('input[type="checkbox"], input[type="radio"]')) {
+        saveFormData();
+    }
+});
+
+// Run load on start
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadFormData);
+} else {
+    loadFormData();
+}
