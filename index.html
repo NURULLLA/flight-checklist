@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loadmaster Flight Summary</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style_mobile.css?v=1.6">
+    <link rel="stylesheet" href="css/style_mobile.css?v=1.7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -112,7 +112,7 @@
             outline: none;
             font-family: inherit;
             font-size: 11px;
-            color: #000 !important; /* Force black */
+            color: #000 !important;
         }
 
         .checklist-table {
@@ -167,7 +167,7 @@
             </div>
             <div class="completed-by">
                 <label>COMPLETED BY</label>
-                <input type="text" id="completed-by-input">
+                <input type="text" id="completed-by">
             </div>
         </div>
 
@@ -196,6 +196,12 @@
                     <div class="row"><div class="label">DATE</div><div class="input-area"><input type="text" id="flight-date"></div></div>
                     <div class="row"><div class="label">EMBARK</div><div class="input-area"><input type="text" id="embark"></div></div>
                     <div class="row"><div class="label">DISEMBARK</div><div class="input-area"><input type="text" id="disembark"></div></div>
+                </div>
+                <div class="box" style="margin-top: 10px;">
+                    <div class="box-header">PAYLOAD</div>
+                    <div class="row"><div class="label">NET WGT</div><div class="input-area"><input type="text" id="net-wgt"></div></div>
+                    <div class="row"><div class="label">GROSS WGT</div><div class="input-area"><input type="text" id="gross-wgt"></div></div>
+                    <div class="row"><div class="label">QTY PCS</div><div class="input-area"><input type="text" id="qty-pcs"></div></div>
                 </div>
             </div>
 
@@ -302,55 +308,108 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- DEPARTURE FLIGHT -->
                 <tr><td colspan="5" class="section-header">DEPARTURE FLIGHT</td></tr>
-                <tr>
-                    <td>1</td><td>SERVICE START</td>
-                    <td style="text-align: center;"><input type="checkbox" id="chk-1"></td>
-                    <td><input type="text" id="service-start" placeholder="HHMM" style="text-align: center;"></td>
-                    <td><input type="text" id="rem-1"></td>
-                </tr>
-                <!-- More rows here... summarized for clarity -->
-                <tr>
-                    <td>9</td><td>OFF-BLOCK / ENGINES START</td>
-                    <td style="text-align: center;"><input type="checkbox" id="chk-9"></td>
-                    <td><input type="text" id="service-end" placeholder="HHMM" style="text-align: center;"></td>
-                    <td><input type="text" id="rem-9"></td>
-                </tr>
-                <tr>
-                    <td>10</td><td>SERVICE TIME (Total)</td>
-                    <td></td>
-                    <td><input type="text" id="service-total" placeholder="HRS MIN" readonly style="text-align: center;"></td>
-                    <td><input type="text" id="rem-10"></td>
-                </tr>
+                <tr><td>1</td><td>SERVICE START</td><td style="text-align: center;"><input type="checkbox" id="chk-1"></td><td><input type="text" id="service-start" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-1"></td></tr>
+                <tr><td>2</td><td>GROUND SERVICE EQUIPMENT (Ready)</td><td style="text-align: center;"><input type="checkbox" id="chk-2"></td><td><input type="text" id="val-2" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-2"></td></tr>
+                <tr><td>3</td><td>UWS / LOAD-WEIGHT STATEMENT (Received)</td><td style="text-align: center;"><input type="checkbox" id="chk-3"></td><td><input type="text" id="val-3" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-3"></td></tr>
+                <tr><td>4</td><td>CARGO DOCUMENTS (Received/Onboard)</td><td style="text-align: center;"><input type="checkbox" id="chk-4"></td><td><input type="text" id="val-4" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-4"></td></tr>
+                <tr><td>5</td><td>LOADING INSTRUCTION (Fwd'd to Ramp)</td><td style="text-align: center;"><input type="checkbox" id="chk-5"></td><td><input type="text" id="val-5" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-5"></td></tr>
+                <tr><td>6</td><td>CATERING (Provided/Onboard)</td><td style="text-align: center;"><input type="checkbox" id="chk-6"></td><td><input type="text" id="val-6" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-6"></td></tr>
+                <tr><td>7</td><td>REFUELING (Uplift Started)</td><td style="text-align: center;"><input type="checkbox" id="chk-7"></td><td><input type="text" id="val-7" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-7"></td></tr>
+                <tr><td>8</td><td>ALL DOORS (Closed)</td><td style="text-align: center;"><input type="checkbox" id="chk-8"></td><td><input type="text" id="val-8" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-8"></td></tr>
+                <tr><td>9</td><td>OFF-BLOCK / ENGINES START</td><td style="text-align: center;"><input type="checkbox" id="chk-9"></td><td><input type="text" id="service-end" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-9"></td></tr>
+                <tr><td>10</td><td>SERVICE TIME (Total)</td><td></td><td><input type="text" id="service-total" placeholder="HRS MIN" readonly style="text-align: center;"></td><td><input type="text" id="rem-10"></td></tr>
+
+                <!-- SERVICE CHECKS -->
+                <tr><td colspan="5" class="section-header">SERVICE CHECKS</td></tr>
+                <tr><td>11</td><td>CREW BUS</td><td style="text-align: center;"><input type="checkbox" id="chk-11"></td><td><input type="text" id="val-11" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-11"></td></tr>
+                <tr><td>12</td><td>LAVATORY</td><td style="text-align: center;"><input type="checkbox" id="chk-12"></td><td><input type="text" id="val-12" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-12"></td></tr>
+                <tr><td>13</td><td>POTABLE WATER</td><td style="text-align: center;"><input type="checkbox" id="chk-13"></td><td><input type="text" id="val-13" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-13"></td></tr>
+                <tr><td>14</td><td>CABIN CLEANING</td><td style="text-align: center;"><input type="checkbox" id="chk-14"></td><td><input type="text" id="val-14" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-14"></td></tr>
+                <tr><td>15</td><td>PUSH BACK / TOWING</td><td style="text-align: center;"><input type="checkbox" id="chk-15"></td><td><input type="text" id="val-15" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-15"></td></tr>
+                <tr><td>16</td><td>ASU</td><td style="text-align: center;"><input type="checkbox" id="chk-16"></td><td><input type="text" id="val-16" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-16"></td></tr>
+                <tr><td>17</td><td>ACU</td><td style="text-align: center;"><input type="checkbox" id="chk-17"></td><td><input type="text" id="val-17" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-17"></td></tr>
+                <tr><td>18</td><td>GPU</td><td style="text-align: center;"><input type="checkbox" id="chk-18"></td><td><input type="text" id="val-18" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-18"></td></tr>
+                <tr><td>19</td><td>OXYGEN</td><td style="text-align: center;"><input type="checkbox" id="chk-19"></td><td><input type="text" id="val-19" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-19"></td></tr>
+                <tr><td>20</td><td>NITROGEN</td><td style="text-align: center;"><input type="checkbox" id="chk-20"></td><td><input type="text" id="val-20" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-20"></td></tr>
+                <tr><td>21</td><td>DE-ICING</td><td style="text-align: center;"><input type="checkbox" id="chk-21"></td><td><input type="text" id="val-21" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-21"></td></tr>
+                <tr><td>22</td><td>OTHER</td><td style="text-align: center;"><input type="checkbox" id="chk-22"></td><td><input type="text" id="val-22" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-22"></td></tr>
+
+                <!-- BEFORE LOADING -->
+                <tr><td colspan="5" class="section-header">BEFORE LOADING CHECKLIST</td></tr>
+                <tr><td>23</td><td>COCKPIT TIME (Sync)</td><td style="text-align: center;"><input type="checkbox" id="chk-23"></td><td><input type="text" id="val-23" style="text-align: center;"></td><td><input type="text" id="rem-23"></td></tr>
+                <tr><td>24</td><td>SAFETY NET (Check)</td><td style="text-align: center;"><input type="checkbox" id="chk-24"></td><td><input type="text" id="val-24" style="text-align: center;"></td><td><input type="text" id="rem-24"></td></tr>
+                <tr><td>25</td><td>CARGO COMPARTMENTS (Empty)</td><td style="text-align: center;"><input type="checkbox" id="chk-25"></td><td><input type="text" id="val-25" style="text-align: center;"></td><td><input type="text" id="rem-25"></td></tr>
+                <tr><td>26</td><td>GROUND HANDLING COMPANY</td><td style="text-align: center;"><input type="checkbox" id="chk-26"></td><td><input type="text" id="val-26" style="text-align: center;"></td><td><input type="text" id="rem-26"></td></tr>
+                <tr><td>27</td><td>UWS / DEAD-LOAD STATEMENT</td><td style="text-align: center;"><input type="checkbox" id="chk-27"></td><td><input type="text" id="val-27" style="text-align: center;"></td><td><input type="text" id="rem-27"></td></tr>
+                <tr><td>28</td><td>SPECIAL LOAD & NOTOC</td><td style="text-align: center;"><input type="checkbox" id="chk-28"></td><td><input type="text" id="val-28" style="text-align: center;"></td><td><input type="text" id="rem-28"></td></tr>
+
+                <!-- AFTER LOADING -->
+                <tr><td colspan="5" class="section-header">AFTER LOADING CHECKLIST</td></tr>
+                <tr><td>33</td><td>LOAD & TRIM SHEET (Signed)</td><td style="text-align: center;"><input type="checkbox" id="chk-33"></td><td><input type="text" id="val-33" style="text-align: center;"></td><td><input type="text" id="rem-33"></td></tr>
+                <tr><td>34</td><td>REQ'D DOCUMENTS (Handed)</td><td style="text-align: center;"><input type="checkbox" id="chk-34"></td><td><input type="text" id="val-34" style="text-align: center;"></td><td><input type="text" id="rem-34"></td></tr>
+                <tr><td>35</td><td>ALL CARGO DOORS (Closed)</td><td style="text-align: center;"><input type="checkbox" id="chk-35"></td><td><input type="text" id="val-35" style="text-align: center;"></td><td><input type="text" id="rem-35"></td></tr>
+
+                <!-- AFTER LANDING -->
+                <tr><td colspan="5" class="section-header">AFTER LANDING CHECKLIST</td></tr>
+                <tr><td>36</td><td>BLOCK TIME & STAND</td><td></td><td><input type="text" id="val-36" placeholder="Time" style="text-align: center;"></td><td><input type="text" id="rem-36" placeholder="Stand"></td></tr>
+                <tr><td>37</td><td>FUEL QUANTITY</td><td></td><td></td><td><input type="text" id="rem-37" placeholder="Qty"></td></tr>
+                <tr><td>38</td><td>REMARKS</td><td></td><td></td><td><input type="text" id="rem-38"></td></tr>
             </tbody>
         </table>
 
+        <!-- GPU OPERATION -->
+        <div class="box" style="margin-top: 20px;">
+            <div class="box-header">GPU OPERATION</div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #eee;">
+                        <th style="border: 1px solid #ccc; padding: 4px;">AIRPORT</th>
+                        <th style="border: 1px solid #ccc; padding: 4px;">STAND</th>
+                        <th style="border: 1px solid #ccc; padding: 4px;">START</th>
+                        <th style="border: 1px solid #ccc; padding: 4px;">END</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-apt-1"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-std-1"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-start-1" style="text-align: center;"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-end-1" style="text-align: center;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-apt-2"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-std-2"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-start-2" style="text-align: center;"></td>
+                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-end-2" style="text-align: center;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <div style="text-align: center; font-size: 10px; color: #999; margin-top: 30px;">
-            App Version: 1.6 (Structural Cleanup & Logic Fix)
+            App Version: 1.7 (Full Content Recovery & Data Consistency)
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="js/html2pdf.bundle.min.js?v=1.6"></script>
-    <script src="js/checklist.js?v=1.6"></script>
-    <script src="js/word_export.js?v=1.6"></script>
+    <script src="js/html2pdf.bundle.min.js?v=1.7"></script>
+    <script src="js/checklist.js?v=1.7"></script>
+    <script src="js/word_export.js?v=1.7"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js?v=1.6')
+            navigator.serviceWorker.register('service-worker.js?v=1.7')
                 .then(reg => {
-                    console.log('Service Worker registered');
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
                             if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                if (confirm("New update available! Reload now?")) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             }
                         };
                     };
-                })
-                .catch(err => console.error('SW failed', err));
+                }).catch(err => console.error('SW failed', err));
         }
     </script>
 </body>
