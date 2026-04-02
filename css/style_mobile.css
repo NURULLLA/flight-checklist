@@ -32,7 +32,8 @@ body {
     gap: 0.75rem;
 }
 
-/* Buttons with micro‑animations */n.btn-word, .btn-print, .btn-clear {
+/* Buttons with micro‑animations */
+.btn-word, .btn-print, .btn-clear {
     transition: background-color 0.2s ease, transform 0.1s ease;
     border-radius: 6px;
     font-weight: 600;
@@ -63,7 +64,8 @@ input[type="checkbox"] {
     accent-color: #0d6efd;
 }
 
-/* Table styling for checklist */n.checklist-table {
+/* Table styling for checklist */
+.checklist-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
@@ -95,4 +97,37 @@ input[type="checkbox"] {
     .top-bar { flex-direction: column; align-items: flex-start; }
     .controls { text-align: left; margin-bottom: 1rem; }
     .container { padding: 0.5rem; }
+}
+
+/* PDF Export Optimization */
+.pdf-mode {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 10mm !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    box-sizing: border-box !important;
+}
+
+.pdf-mode input, .pdf-mode textarea {
+    color: #000000 !important;
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+}
+
+.pdf-mode .container, .pdf-mode .box, .pdf-mode .checklist-table, .pdf-mode th, .pdf-mode td {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+    backdrop-filter: none !important;
+}
+
+.pdf-mode .box-header, .pdf-mode .section-header {
+    background: #eeeeee !important;
+    color: #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+.pdf-mode #utc-clock {
+    color: #000000 !important;
 }

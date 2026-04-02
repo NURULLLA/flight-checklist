@@ -42,6 +42,7 @@ function generatePDF() {
 
     const originalElement = document.getElementById('checklist-content');
     const clone = originalElement.cloneNode(true);
+    clone.classList.add('pdf-mode'); // Apply PDF specific styles
 
     const container = document.createElement('div');
     container.style.position = 'absolute';
@@ -53,8 +54,6 @@ function generatePDF() {
     container.style.backgroundColor = '#ffffff';
     container.appendChild(clone);
     document.body.appendChild(container);
-
-    clone.classList.add('pdf-mode');
 
     const originalInputs = originalElement.querySelectorAll('input, textarea, select');
     const cloneInputs = clone.querySelectorAll('input, textarea, select');
@@ -81,8 +80,9 @@ function generatePDF() {
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
             scale: 2,
-            width: 794,
-            windowWidth: 794,
+            useCORS: true,
+            logging: false,
+            letterRendering: true,
             scrollX: 0,
             scrollY: 0
         },
