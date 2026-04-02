@@ -1,8 +1,8 @@
 {
-  "name": "Sky Guard Flight Checklist",
+  "name": "Loadmaster Flight Summary",
   "short_name": "Checklist",
-  "description": "Mobile-friendly flight checklist with offline support",
-  "start_url": "./checklist.html",
+  "description": "Premium Loadmaster Flight Checklist with Unified Print/PDF",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#0d0d0d",

@@ -1,12 +1,12 @@
-const CACHE_NAME = 'flight-checklist-v1.7';
+const CACHE_NAME = 'flight-checklist-v2.0';
 const URLs_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './css/style_mobile.css?v=1.7',
-  './js/checklist.js?v=1.7',
-  './js/html2pdf.bundle.min.js?v=1.7',
-  './js/word_export.js?v=1.7',
+  './css/style_mobile.css?v=2.0',
+  './js/checklist.js?v=2.0',
+  './js/html2pdf.bundle.min.js?v=2.0',
+  './js/word_export.js?v=2.0',
   './img/icon-192.png',
   './img/icon-512.png'
 ];

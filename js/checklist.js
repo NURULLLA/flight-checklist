@@ -1,5 +1,5 @@
-/* JS for Checklist App v1.7 */
-console.log("Flight Checklist v1.7 Loaded");
+/* JS for Checklist App v2.0 */
+console.log("Flight Checklist v2.0 Loaded");
 
 function getUTCTime() {
     const now = new Date();
@@ -17,18 +17,27 @@ function setUTCTime(btnElement) {
     }
 }
 
+function showClearModal() {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeClearModal() {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.classList.remove('show');
+}
+
 function clearForm() {
-    if (confirm("Are you sure you want to clear the form?")) {
-        const inputs = document.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                input.checked = false;
-            } else {
-                input.value = '';
-            }
-        });
-        localStorage.removeItem('flightChecklistData');
-    }
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+    localStorage.removeItem('flightChecklistData');
+    closeClearModal();
 }
 
 function generatePDF() {
@@ -37,34 +46,22 @@ function generatePDF() {
         return;
     }
 
-    const originalBtn = document.querySelector('.btn-word');
+    const originalBtn = document.getElementById('btn-pdf');
     if (originalBtn) originalBtn.innerText = "Generating...";
+
+    // Use CSS for styling instead of JS injection
+    document.body.classList.add('pdf-export-mode');
 
     const originalElement = document.getElementById('checklist-content');
     const clone = originalElement.cloneNode(true);
-    clone.classList.add('pdf-mode'); // Apply PDF specific styles
 
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '794px';
-    container.style.minWidth = '794px';
-    container.style.zIndex = '-9999';
-    container.style.backgroundColor = '#ffffff';
-    container.appendChild(clone);
-    document.body.appendChild(container);
-
+    // Sync input values to the clone
     const originalInputs = originalElement.querySelectorAll('input, textarea, select');
     const cloneInputs = clone.querySelectorAll('input, textarea, select');
-
     originalInputs.forEach((orig, index) => {
         const copy = cloneInputs[index];
         if (!copy) return;
-
-        if (copy.tagName === 'SELECT') {
-            copy.value = orig.value;
-        } else if (copy.type === 'checkbox' || copy.type === 'radio') {
+        if (copy.type === 'checkbox' || copy.type === 'radio') {
             copy.checked = orig.checked;
             if (orig.checked) copy.setAttribute('checked', 'checked');
         } else {
@@ -74,33 +71,40 @@ function generatePDF() {
         }
     });
 
+    const container = document.createElement('div');
+    container.className = 'pdf-export-mode'; // Apply the styles to the container too
+    container.style.cssText = 'position:absolute; top:0; left:0; z-index:-9999; width:190mm; background:white;';
+    container.appendChild(clone);
+    document.body.appendChild(container);
+
     const opt = {
-        margin: 2,
+        margin: [0, 0, 0, 0],
         filename: `SGA_Flight_Summary_${new Date().toISOString().slice(0, 10)}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
             scale: 2,
             useCORS: true,
-            logging: false,
             letterRendering: true,
             scrollX: 0,
-            scrollY: 0
+            scrollY: 0,
+            backgroundColor: '#ffffff'
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        enableLinks: true
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     setTimeout(() => {
         html2pdf().set(opt).from(clone).save().then(() => {
             document.body.removeChild(container);
+            document.body.classList.remove('pdf-export-mode');
             if (originalBtn) originalBtn.innerText = "Save as PDF";
         }).catch(err => {
             console.error("PDF Generation Error:", err);
             document.body.removeChild(container);
+            document.body.classList.remove('pdf-export-mode');
             alert("PDF Error: " + (err.message || err));
             if (originalBtn) originalBtn.innerText = "Save as PDF";
         });
-    }, 500);
+    }, 600);
 }
 
 function calculateServiceTotal() {
@@ -281,8 +285,12 @@ document.addEventListener('change', function(e) {
 });
 
 // Run load on start
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadFormData);
-} else {
+document.addEventListener('DOMContentLoaded', function() {
     loadFormData();
-}
+
+    // Wire up custom modal buttons
+    const btnYes = document.getElementById('btn-confirm-yes');
+    const btnNo = document.getElementById('btn-confirm-no');
+    if (btnYes) btnYes.addEventListener('click', clearForm);
+    if (btnNo) btnNo.addEventListener('click', closeClearModal);
+});

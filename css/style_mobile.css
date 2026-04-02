@@ -99,35 +99,72 @@ input[type="checkbox"] {
     .container { padding: 0.5rem; }
 }
 
-/* PDF Export Optimization */
-.pdf-mode {
-    background: #ffffff !important;
-    color: #000000 !important;
-    padding: 10mm !important;
-    margin: 0 !important;
-    width: 210mm !important;
-    box-sizing: border-box !important;
+/* Print and PDF Export Styles (v2.0) */
+@media print {
+    .controls, .btn-word, .btn-print, .btn-clear { display: none !important; }
+    body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; }
+    #app, .container { width: 190mm !important; max-width: 190mm !important; margin: 0 auto !important; background: #fff !important; color: #000 !important; border: none !important; box-shadow: none !important; padding: 5mm !important; }
+    table, th, td { border: 1px solid #000 !important; border-collapse: collapse !important; color: #000 !important; background: #fff !important; }
+    th, .box-header, .section-header { background: #f0f0f0 !important; }
+    input[type="text"], textarea { border: none !important; border-bottom: 1px solid #000 !important; background: transparent !important; color: #000 !important; }
+    input[type="checkbox"] { width: 12px !important; height: 12px !important; border: 1px solid #000 !important; -webkit-appearance: none !important; appearance: none !important; }
+    input[type="checkbox"]:checked::after { content: '✔'; display: block; text-align: center; font-size: 10px; line-height: 12px; color: #000; }
 }
 
-.pdf-mode input, .pdf-mode textarea {
-    color: #000000 !important;
-    background: #ffffff !important;
-    border: 1px solid #000000 !important;
+.pdf-export-mode {
+    background: #fff !important;
+    color: #000 !important;
 }
-
-.pdf-mode .container, .pdf-mode .box, .pdf-mode .checklist-table, .pdf-mode th, .pdf-mode td {
-    background: #ffffff !important;
-    color: #000000 !important;
-    border-color: #000000 !important;
+.pdf-export-mode .controls, .pdf-export-mode .btn-word, .pdf-export-mode .btn-print, .pdf-export-mode .btn-clear {
+    display: none !important;
+}
+.pdf-export-mode .container {
+    width: 190mm !important;
+    max-width: 190mm !important;
+    margin: 0 auto !important;
+    background: #fff !important;
+    color: #000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 5mm !important;
     backdrop-filter: none !important;
 }
-
-.pdf-mode .box-header, .pdf-mode .section-header {
-    background: #eeeeee !important;
-    color: #000000 !important;
-    border-bottom: 1px solid #000000 !important;
+.pdf-export-mode table, .pdf-export-mode th, .pdf-export-mode td {
+    border: 1px solid #000 !important;
+    border-collapse: collapse !important;
+    color: #000 !important;
+    background: #fff !important;
+}
+.pdf-export-mode th, .pdf-export-mode .box-header, .pdf-export-mode .section-header {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+}
+.pdf-export-mode input[type="text"], .pdf-export-mode textarea {
+    border: none !important;
+    border-bottom: 1px solid #000 !important;
+    background: transparent !important;
+    color: #000 !important;
+}
+.pdf-export-mode input[type="checkbox"] {
+    width: 12px !important;
+    height: 12px !important;
+    border: 1px solid #000 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+.pdf-export-mode input[type="checkbox"]:checked::after {
+    content: '✔';
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    line-height: 12px;
+    color: #000;
 }
 
-.pdf-mode #utc-clock {
-    color: #000000 !important;
+/* Custom Modal fixes for dark mode */
+#confirm-modal .modal-box {
+    background: #1e1e2e;
+    color: #fff;
 }
+
+

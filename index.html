@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loadmaster Flight Summary</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style_mobile.css?v=1.7">
+    <link rel="stylesheet" href="css/style_mobile.css?v=2.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -145,15 +145,74 @@
             body { padding: 0; }
             .container { width: 100%; max-width: none; }
         }
+
+        /* Custom confirm modal */
+        #confirm-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        #confirm-modal.show { display: flex; }
+        #confirm-modal .modal-box {
+            background: #1e1e2e;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 30px 36px;
+            max-width: 380px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        #confirm-modal .modal-box p {
+            color: #e0e0e0;
+            font-size: 15px;
+            margin: 0 0 24px;
+            line-height: 1.5;
+        }
+        #confirm-modal .modal-box strong {
+            color: #ff6b6b;
+        }
+        #confirm-modal .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        #confirm-modal .modal-actions button {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+        }
+        #confirm-modal .modal-actions button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        #btn-confirm-yes { background: #dc3545; color: #fff; }
+        #btn-confirm-no  { background: #444; color: #e0e0e0; }
     </style>
 </head>
 
 <body>
 
+    <!-- Custom Confirm Modal -->
+    <div id="confirm-modal">
+        <div class="modal-box">
+            <p>⚠️ <strong>Clear All Data?</strong><br>This will erase everything. Are you sure?</p>
+            <div class="modal-actions">
+                <button id="btn-confirm-yes">Yes, Clear</button>
+                <button id="btn-confirm-no">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div class="controls">
-        <button class="btn-word" onclick="generatePDF()">Save as PDF</button>
+        <button class="btn-word" id="btn-pdf" onclick="generatePDF()">Save as PDF</button>
         <button class="btn-print" onclick="window.print()">Print</button>
-        <button class="btn-clear" onclick="clearForm()">Clear All Data</button>
+        <button class="btn-clear" onclick="showClearModal()">Clear All Data</button>
     </div>
 
     <div id="checklist-content" class="container">
@@ -394,12 +453,12 @@
     </div>
 
     <!-- Scripts -->
-    <script src="js/html2pdf.bundle.min.js?v=1.7"></script>
-    <script src="js/checklist.js?v=1.7"></script>
-    <script src="js/word_export.js?v=1.7"></script>
+    <script src="js/html2pdf.bundle.min.js?v=2.0"></script>
+    <script src="js/checklist.js?v=2.0"></script>
+    <script src="js/word_export.js?v=2.0"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js?v=1.7')
+            navigator.serviceWorker.register('service-worker.js?v=2.0')
                 .then(reg => {
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
