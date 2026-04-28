@@ -17,6 +17,16 @@ function setUTCTime(btnElement) {
     }
 }
 
+function setUTCTimeById(id) {
+    const input = document.getElementById(id);
+    if (input) {
+        input.value = getUTCTime();
+        saveFormData();
+        // Trigger specific calculations if needed
+        if (id.includes('service')) calculateServiceTotal();
+    }
+}
+
 function showClearModal() {
     const modal = document.getElementById('confirm-modal');
     if (modal) modal.classList.add('show');
@@ -126,6 +136,7 @@ function calculateServiceTotal() {
     const diffM = diff % 60;
 
     target.value = `${diffH}h ${diffM}m`;
+    saveFormData();
 }
 
 function calculateLoadingTotal() {
@@ -171,6 +182,7 @@ function calculateLoadingTotal() {
 
     hrsEl.value = Math.floor(diff / 60);
     minEl.value = diff % 60;
+    saveFormData();
 }
 
 function calculateDelay() {
@@ -193,10 +205,33 @@ function calculateDelay() {
     } else {
         delayInput.value = '';
     }
+    saveFormData();
+}
+
+function calculateEA() {
+    const edStr = document.getElementById('move-ed').value;
+    const eeStr = document.getElementById('move-ee').value;
+    const eaInput = document.getElementById('move-ea');
+
+    if (!edStr || !eeStr || !eaInput) return;
+
+    const edMin = robustParseTime(edStr);
+    const eeMin = robustParseTime(eeStr);
+
+    if (edMin === null || eeMin === null) return;
+
+    let totalMin = (edMin + eeMin) % 1440;
+    const h = Math.floor(totalMin / 60);
+    const m = totalMin % 60;
+    
+    eaInput.value = `${String(h).padStart(2, '0')}${String(m).padStart(2, '0')}`;
+    saveFormData();
 }
 
 function robustParseTime(tStr) {
-    const cleanStr = (tStr || '').replace(/\D/g, '');
+    if (!tStr) return null;
+    // Strip colons and other non-digits
+    const cleanStr = tStr.replace(/:/g, '').replace(/\D/g, '');
     let h, m;
     if (cleanStr.length === 3) {
         h = parseInt(cleanStr.substring(0, 1), 10);
@@ -265,6 +300,7 @@ function loadFormData() {
     calculateServiceTotal();
     calculateLoadingTotal();
     calculateDelay();
+    calculateEA();
 }
 
 // Auto-save and auto-calculate
@@ -274,7 +310,10 @@ document.addEventListener('input', function(e) {
         const id = e.target.id;
         if (id.includes('service')) calculateServiceTotal();
         if (id.includes('load')) calculateLoadingTotal();
-        if (id.includes('move')) calculateDelay();
+        if (id.includes('move')) {
+            calculateDelay();
+            calculateEA();
+        }
     }
 });
 

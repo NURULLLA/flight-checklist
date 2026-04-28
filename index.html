@@ -238,7 +238,7 @@
                     <div class="box-header">FLIGHT INFORMATION</div>
                     <div class="row">
                         <div class="label">A/C REG</div>
-                        <div class="input-area"><input type="text" id="ac-reg" value="UK 7505__"></div>
+                        <div class="input-area"><input type="text" id="ac-reg" value="UK 7505"></div>
                     </div>
                     <div class="row">
                         <div class="label">FLIGHT NO</div>
@@ -369,7 +369,20 @@
             <tbody>
                 <!-- DEPARTURE FLIGHT -->
                 <tr><td colspan="5" class="section-header">DEPARTURE FLIGHT</td></tr>
-                <tr><td>1</td><td>SERVICE START</td><td style="text-align: center;"><input type="checkbox" id="chk-1"></td><td><input type="text" id="service-start" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-1"></td></tr>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        SERVICE START
+                        <div class="sub-btn-group" style="font-size: 9px; font-weight: normal; margin-top: 5px;">
+                            Arrival to AC <input type="checkbox" id="chk-arrival-ac" onclick="if(this.checked) setUTCTimeById('service-start')">
+                            &nbsp;&nbsp;
+                            ON-Block <input type="checkbox" id="chk-on-block" onclick="if(this.checked) setUTCTimeById('service-start')">
+                        </div>
+                    </td>
+                    <td style="text-align: center;"><input type="checkbox" id="chk-1"></td>
+                    <td><input type="text" id="service-start" placeholder="HHMM" style="text-align: center;"></td>
+                    <td><input type="text" id="rem-1"></td>
+                </tr>
                 <tr><td>2</td><td>GROUND SERVICE EQUIPMENT (Ready)</td><td style="text-align: center;"><input type="checkbox" id="chk-2"></td><td><input type="text" id="val-2" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-2"></td></tr>
                 <tr><td>3</td><td>UWS / LOAD-WEIGHT STATEMENT (Received)</td><td style="text-align: center;"><input type="checkbox" id="chk-3"></td><td><input type="text" id="val-3" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-3"></td></tr>
                 <tr><td>4</td><td>CARGO DOCUMENTS (Received/Onboard)</td><td style="text-align: center;"><input type="checkbox" id="chk-4"></td><td><input type="text" id="val-4" placeholder="HHMM" style="text-align: center;"></td><td><input type="text" id="rem-4"></td></tr>
@@ -423,25 +436,31 @@
             <div class="box-header">GPU OPERATION</div>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr style="background: #eee;">
-                        <th style="border: 1px solid #ccc; padding: 4px;">AIRPORT</th>
-                        <th style="border: 1px solid #ccc; padding: 4px;">STAND</th>
-                        <th style="border: 1px solid #ccc; padding: 4px;">START</th>
-                        <th style="border: 1px solid #ccc; padding: 4px;">END</th>
+                    <tr style="background: rgba(255,255,255,0.1); color: #fff;">
+                        <th style="border: 1px solid rgba(255,255,255,0.2); padding: 4px;">AIRPORT</th>
+                        <th style="border: 1px solid rgba(255,255,255,0.2); padding: 4px;">STAND</th>
+                        <th style="border: 1px solid rgba(255,255,255,0.2); padding: 4px;">START</th>
+                        <th style="border: 1px solid rgba(255,255,255,0.2); padding: 4px;">END</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-apt-1"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-std-1"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-start-1" style="text-align: center;"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-end-1" style="text-align: center;"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-apt-1"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-std-1"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-start-1" style="text-align: center;"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-end-1" style="text-align: center;"></td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-apt-2"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-std-2"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-start-2" style="text-align: center;"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" id="gpu-end-2" style="text-align: center;"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-apt-2"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-std-2"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-start-2" style="text-align: center;"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-end-2" style="text-align: center;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-apt-3"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-std-3"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-start-3" style="text-align: center;"></td>
+                        <td style="border: 1px solid rgba(255,255,255,0.1);"><input type="text" id="gpu-end-3" style="text-align: center;"></td>
                     </tr>
                 </tbody>
             </table>

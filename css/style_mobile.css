@@ -46,6 +46,15 @@ body {
     filter: brightness(1.1);
 }
 
+/* Sub-buttons styling */
+.sub-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    color: #8ab4f8;
+}
+
 /* Input styling */
 input[type="text"], textarea {
     background: rgba(255,255,255,0.05);
