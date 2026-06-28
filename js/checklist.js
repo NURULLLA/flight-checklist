@@ -323,9 +323,44 @@ document.addEventListener('change', function(e) {
     }
 });
 
+// Import flight data pushed from the AviaBit Tampermonkey export script.
+// Payload arrives as base64-encoded JSON in the URL hash: #import=<base64>
+function importFlightData() {
+    const match = window.location.hash.match(/import=([^&]+)/);
+    if (!match) return;
+
+    let data;
+    try {
+        data = JSON.parse(decodeURIComponent(atob(match[1])));
+    } catch (err) {
+        console.error('Failed to parse imported flight data', err);
+        return;
+    }
+
+    Object.keys(data).forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox' || el.type === 'radio') {
+            el.checked = !!data[id];
+        } else {
+            el.value = data[id];
+        }
+    });
+
+    // Clear the hash so a refresh/share doesn't re-import or leak the payload.
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+
+    saveFormData();
+    calculateServiceTotal();
+    calculateLoadingTotal();
+    calculateDelay();
+    calculateEA();
+}
+
 // Run load on start
 document.addEventListener('DOMContentLoaded', function() {
     loadFormData();
+    importFlightData();
 
     // Wire up custom modal buttons
     const btnYes = document.getElementById('btn-confirm-yes');
