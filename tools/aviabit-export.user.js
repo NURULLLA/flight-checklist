@@ -90,7 +90,9 @@
             });
 
             const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
-            window.open(`${CHECKLIST_URL}#import=${encoded}`, '_blank');
+            // Cache-busting query param defeats any stale Service Worker cache
+            // on the checklist app, regardless of its own cache version.
+            window.open(`${CHECKLIST_URL}?t=${Date.now()}#import=${encoded}`, '_blank');
         } catch (err) {
             console.error(err);
             alert(`Export failed: ${err.message}`);

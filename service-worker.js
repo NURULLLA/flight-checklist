@@ -1,12 +1,12 @@
-const CACHE_NAME = 'flight-checklist-v2.1';
+const CACHE_NAME = 'flight-checklist-v2.2';
 const URLs_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './css/style_mobile.css?v=2.1',
-  './js/checklist.js?v=2.1',
-  './js/html2pdf.bundle.min.js?v=2.1',
-  './js/word_export.js?v=2.1',
+  './css/style_mobile.css?v=2.2',
+  './js/checklist.js?v=2.2',
+  './js/html2pdf.bundle.min.js?v=2.2',
+  './js/word_export.js?v=2.2',
   './img/icon-192.png',
   './img/icon-512.png'
 ];
@@ -31,20 +31,17 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Network-first: always try to get the latest version. Only fall back to
+  // cache when offline, so a deploy is never masked by a stale cached copy.
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) return response;
-        return fetch(event.request).then(response => {
-           if(!response || response.status !== 200 || response.type !== 'basic') {
-             return response;
-           }
-           const responseToCache = response.clone();
-           caches.open(CACHE_NAME).then(cache => {
-             cache.put(event.request, responseToCache);
-           });
-           return response;
+    fetch(event.request).then(response => {
+      if (response && response.status === 200 && response.type === 'basic') {
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseToCache);
         });
-      })
+      }
+      return response;
+    }).catch(() => caches.match(event.request))
   );
 });
