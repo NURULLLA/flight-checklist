@@ -1,10 +1,11 @@
-const CACHE_NAME = 'flight-checklist-v2.2';
+const CACHE_NAME = 'flight-checklist-v2.3';
 const URLs_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './css/style_mobile.css?v=2.2',
-  './js/checklist.js?v=2.2',
+  './css/style_mobile.css?v=2.3',
+  './js/checklist.js?v=2.3',
+  './js/aviabit.js?v=2.3',
   './js/html2pdf.bundle.min.js?v=2.2',
   './js/word_export.js?v=2.2',
   './img/icon-192.png',

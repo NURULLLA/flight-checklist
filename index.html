@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loadmaster Flight Summary</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style_mobile.css?v=2.2">
+    <link rel="stylesheet" href="css/style_mobile.css?v=2.3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -46,6 +46,7 @@
         .btn-word { background: #0056b3; color: white; }
         .btn-print { background: #28a745; color: white; }
         .btn-clear { background: #dc3545; color: white; }
+        .btn-history { background: #198754; color: white; }
 
         .container {
             max-width: 210mm;
@@ -210,6 +211,7 @@
     </div>
 
     <div class="controls">
+        <button class="btn-history" id="btn-history">✈ Flight History</button>
         <button class="btn-word" id="btn-pdf" onclick="generatePDF()">Save as PDF</button>
         <button class="btn-print" onclick="window.print()">Print</button>
         <button class="btn-clear" onclick="showClearModal()">Clear All Data</button>
@@ -473,7 +475,8 @@
 
     <!-- Scripts -->
     <script src="js/html2pdf.bundle.min.js?v=2.2"></script>
-    <script src="js/checklist.js?v=2.2"></script>
+    <script src="js/checklist.js?v=2.3"></script>
+    <script src="js/aviabit.js?v=2.3"></script>
     <script src="js/word_export.js?v=2.2"></script>
     <script>
         if ('serviceWorker' in navigator) {

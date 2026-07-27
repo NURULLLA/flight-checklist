@@ -1,12 +1,20 @@
 // ==UserScript==
 // @name         AviaBit -> Flight Checklist Export
 // @namespace    skyguard.checklist
-// @version      1.0
-// @description  Pull flight data from ab-web.aviastartu.ru and push it into the Loadmaster Flight Summary checklist app.
+// @version      2.0
+// @description  Adds an "Export to Checklist" button on an AviaBit flight card. Opens the Loadmaster Flight Summary with the flight already filled in.
 // @match        https://ab-web.aviastartu.ru/flight-card*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
+
+/*
+ * This is the push direction: start on AviaBit, land in the checklist.
+ * The pull direction (Flight History button inside the checklist app) is
+ * handled by tools/aviabit-bridge.user.js.
+ *
+ * Both use the same field mapping — see js/aviabit.js -> mapLegToForm().
+ */
 
 (function () {
     'use strict';
@@ -14,46 +22,54 @@
     const CHECKLIST_URL = 'https://nurullla.github.io/flight-checklist/';
 
     function getPlanFlightId() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('planFlightId');
+        return new URLSearchParams(window.location.search).get('planFlightId');
     }
 
-    function toHHMM(isoString) {
-        if (!isoString) return '';
-        const d = new Date(isoString);
+    function hhmm(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
         if (isNaN(d.getTime())) return '';
-        const h = String(d.getUTCHours()).padStart(2, '0');
-        const m = String(d.getUTCMinutes()).padStart(2, '0');
-        return `${h}${m}`;
+        return String(d.getUTCHours()).padStart(2, '0') + String(d.getUTCMinutes()).padStart(2, '0');
     }
 
-    function toDateStr(isoString) {
-        if (!isoString) return '';
-        const d = new Date(isoString);
+    function dateStr(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
         if (isNaN(d.getTime())) return '';
-        const dd = String(d.getUTCDate()).padStart(2, '0');
-        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-        return `${dd}.${mm}.${d.getUTCFullYear()}`;
+        return String(d.getUTCDate()).padStart(2, '0') + '.' +
+               String(d.getUTCMonth() + 1).padStart(2, '0') + '.' +
+               d.getUTCFullYear();
+    }
+
+    // Elapsed time between two timestamps, as HHMM.
+    function durationHHMM(fromIso, toIso) {
+        if (!fromIso || !toIso) return '';
+        const a = new Date(fromIso).getTime();
+        const b = new Date(toIso).getTime();
+        if (isNaN(a) || isNaN(b)) return '';
+        let mins = Math.round((b - a) / 60000);
+        while (mins < 0) mins += 1440;
+        if (mins >= 1440) return '';
+        return String(Math.floor(mins / 60)).padStart(2, '0') + String(mins % 60).padStart(2, '0');
+    }
+
+    function firstOf() {
+        for (let i = 0; i < arguments.length; i++) {
+            if (arguments[i]) return arguments[i];
+        }
+        return null;
     }
 
     async function fetchJSON(path) {
-        const res = await fetch(`https://ab-web.aviastartu.ru/api/${path}`, {
-            credentials: 'include'
-        });
-        if (!res.ok) throw new Error(`${path} failed: ${res.status}`);
+        const res = await fetch('https://ab-web.aviastartu.ru/api/' + path, { credentials: 'include' });
+        if (!res.ok) throw new Error(path + ' failed: ' + res.status);
         return res.json();
-    }
-
-    function parseCrewXML(xmlStr) {
-        if (!xmlStr) return [];
-        const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
-        return Array.from(doc.getElementsByTagName('employee')).map(el => el.textContent.trim());
     }
 
     async function exportFlight() {
         const planFlightId = getPlanFlightId();
         if (!planFlightId) {
-            alert('No planFlightId found in URL.');
+            alert('No planFlightId found in the URL.');
             return;
         }
 
@@ -64,30 +80,44 @@
                 fetchJSON(`preliminary-crew-load?planFlightId=${planFlightId}&eng=false`)
             ]);
 
-            const firstLeg = Array.isArray(airports) && airports.length ? airports[0] : {};
-            const lastLeg = Array.isArray(airports) && airports.length ? airports[airports.length - 1] : {};
+            const legs = Array.isArray(airports) ? airports : [];
+            const first = legs[0] || {};
+            const last = legs.length ? legs[legs.length - 1] : {};
 
-            const crewNames = (crewLoad.crew || []).map(c => c.personnel);
+            // Only genuine actual times. The *Calculation fields mirror the
+            // schedule on flights that have not operated yet, so using them
+            // would write fabricated departure/arrival times into the form.
+            const actualDep = firstOf(first.DepartUTC, first.TakeoffUTCReal);
+            const actualArr = firstOf(last.ArriveUTC, last.LandingUTCReal);
+            const schedDep = first.TakeoffUTC;
+            const schedArr = last.LandingUTC;
+
+            const crewNames = (crewLoad.crew || [])
+                .filter(c => c.personnel)
+                .map(c => c.personnel);
 
             const plnMatch = /№\s*(\S+)/.exec(card.plnName || '');
 
             const payload = {
-                'flight-no': card.flightName || '',
-                'ac-reg': plnMatch ? plnMatch[1] : '',
-                'flight-date': toDateStr(card.dateUtc),
-                'embark': firstLeg.AirportIATA || firstLeg.AirportICAO || '',
-                'disembark': lastLeg.AirportIATA || lastLeg.AirportICAO || '',
-                'crew-1': crewNames[0] || '',
-                'crew-2': crewNames[1] || '',
-                'move-ed': toHHMM(firstLeg.TakeoffUTC || firstLeg.TakeoffCalculationUTC),
-                'move-ad': toHHMM(firstLeg.TakeoffUTCReal),
-                'move-aa': toHHMM(lastLeg.LandingUTCReal)
+                'flight-no':   card.flightName || '',
+                'ac-reg':      plnMatch ? plnMatch[1] : '',
+                'flight-date': dateStr(card.dateUtc),
+                'embark':      first.AirportIATA || first.AirportICAO || '',
+                'disembark':   last.AirportIATA || last.AirportICAO || '',
+                'crew-1':      crewNames[0] || '',
+                'crew-2':      crewNames[1] || '',
+                'move-ed':     hhmm(schedDep),
+                'move-ad':     hhmm(actualDep),
+                'move-ee':     durationHHMM(schedDep, schedArr),
+                'move-at':     durationHHMM(actualDep, actualArr),
+                'move-aa':     hhmm(actualArr)
             };
 
-            // Drop empty values so we don't blank out fields the user already filled.
-            Object.keys(payload).forEach(k => {
-                if (!payload[k]) delete payload[k];
-            });
+            if (first.DelayTakeoffName) payload['delay-reason'] = first.DelayTakeoffName;
+            if (first.StandName) payload['rem-36'] = 'STAND ' + first.StandName;
+
+            // Drop empties so we never blank out something already filled in.
+            Object.keys(payload).forEach(k => { if (!payload[k]) delete payload[k]; });
 
             const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
             // Cache-busting query param defeats any stale Service Worker cache
@@ -95,7 +125,7 @@
             window.open(`${CHECKLIST_URL}?t=${Date.now()}#import=${encoded}`, '_blank');
         } catch (err) {
             console.error(err);
-            alert(`Export failed: ${err.message}`);
+            alert('Export failed: ' + err.message);
         }
     }
 

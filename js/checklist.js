@@ -323,6 +323,29 @@ document.addEventListener('change', function(e) {
     }
 });
 
+// Write a {fieldId: value} map into the form, then persist and recalculate.
+// Shared by the Flight History panel (js/aviabit.js) and the URL import below.
+function applyFlightData(data) {
+    if (!data) return;
+
+    Object.keys(data).forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox' || el.type === 'radio') {
+            el.checked = !!data[id];
+        } else {
+            el.value = data[id];
+        }
+    });
+
+    saveFormData();
+    calculateServiceTotal();
+    calculateLoadingTotal();
+    calculateDelay();
+    calculateEA();
+}
+window.applyFlightData = applyFlightData;
+
 // Import flight data pushed from the AviaBit Tampermonkey export script.
 // Payload arrives as base64-encoded JSON in the URL hash: #import=<base64>
 function importFlightData() {
@@ -337,24 +360,10 @@ function importFlightData() {
         return;
     }
 
-    Object.keys(data).forEach(function(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        if (el.type === 'checkbox' || el.type === 'radio') {
-            el.checked = !!data[id];
-        } else {
-            el.value = data[id];
-        }
-    });
-
     // Clear the hash so a refresh/share doesn't re-import or leak the payload.
     history.replaceState(null, '', window.location.pathname + window.location.search);
 
-    saveFormData();
-    calculateServiceTotal();
-    calculateLoadingTotal();
-    calculateDelay();
-    calculateEA();
+    applyFlightData(data);
 }
 
 // Run load on start
